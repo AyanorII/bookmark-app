@@ -62,6 +62,116 @@ export interface Registry {
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/session_controller').default['store']>>>
     }
   }
+  'api_sessions.store': {
+    methods: ["POST"]
+    pattern: '/api/sessions'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api_sessions_controller').default['store']>>>
+    }
+  }
+  'bookmarks.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/bookmarks'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/bookmarks_controller').default['index']>>>
+    }
+  }
+  'bookmarks.store': {
+    methods: ["POST"]
+    pattern: '/api/bookmarks'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/bookmark').createBookmarkValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/bookmark').createBookmarkValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/bookmarks_controller').default['store']>>>
+    }
+  }
+  'bookmarks.show': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/bookmarks/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/bookmarks_controller').default['show']>>>
+    }
+  }
+  'bookmarks.update': {
+    methods: ["PUT","PATCH"]
+    pattern: '/api/bookmarks/:id'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/bookmark').updateBookmarkValidator)>>
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/bookmark').updateBookmarkValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/bookmarks_controller').default['update']>>>
+    }
+  }
+  'bookmarks.destroy': {
+    methods: ["DELETE"]
+    pattern: '/api/bookmarks/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/bookmarks_controller').default['destroy']>>>
+    }
+  }
+  'bookmarks.togglePin': {
+    methods: ["PATCH"]
+    pattern: '/api/bookmarks/:id/pin'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/bookmarks_controller').default['togglePin']>>>
+    }
+  }
+  'bookmarks.toggleArchive': {
+    methods: ["PATCH"]
+    pattern: '/api/bookmarks/:id/archive'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/bookmarks_controller').default['toggleArchive']>>>
+    }
+  }
+  'bookmarks.incrementViewCount': {
+    methods: ["PATCH"]
+    pattern: '/api/bookmarks/:id/view'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/bookmarks_controller').default['incrementViewCount']>>>
+    }
+  }
+  'api_sessions.destroy': {
+    methods: ["DELETE"]
+    pattern: '/api/sessions/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api_sessions_controller').default['destroy']>>>
+    }
+  }
   'session.destroy': {
     methods: ["POST"]
     pattern: '/logout'

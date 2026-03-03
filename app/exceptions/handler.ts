@@ -29,7 +29,38 @@ export default class HttpExceptionHandler extends ExceptionHandler {
    * The method is used for handling errors and returning
    * response to the client
    */
-  async handle(error: unknown, ctx: HttpContext) {
+  async handle(error: any, ctx: HttpContext) {
+    const wantsJson =
+      ctx.request.url().startsWith('/api') ||
+      ctx.request.accepts(['json']) === 'json' ||
+      ctx.request.header('accept')?.includes('application/json')
+
+    if (wantsJson) {
+      const status = error.status ?? 500
+
+      // Row not found
+      if (status === 404) {
+        return ctx.response.status(404).json({
+          message: error.message ?? 'Not found',
+          code: error.code ?? 'NOT_FOUND',
+        })
+      }
+
+      // Validation errors
+      if (status === 422) {
+        return ctx.response.status(422).json({
+          message: error.message ?? 'Validation failed',
+          errors: error.messages ?? error,
+        })
+      }
+
+      // Default JSON error
+      return ctx.response.status(status).json({
+        message: error.message ?? 'Internal server error',
+        code: error.code,
+      })
+    }
+
     return super.handle(error, ctx)
   }
 
