@@ -1,9 +1,10 @@
 import { BaseTransformer } from '@adonisjs/core/transformers'
 import type Bookmark from '#models/bookmark'
+import TagTransformer from './tag_transformer.ts'
 
 export default class BookmarkTransformer extends BaseTransformer<Bookmark> {
   toObject() {
-    return this.pick(this.resource, [
+    const bookmarkSerializer = this.pick(this.resource, [
       'id',
       'title',
       'url',
@@ -15,5 +16,10 @@ export default class BookmarkTransformer extends BaseTransformer<Bookmark> {
       'archivedAt',
       'lastViewedAt',
     ])
+
+    return {
+      ...bookmarkSerializer,
+      tags: this.resource.tags ? TagTransformer.transform(this.resource.tags) : [],
+    }
   }
 }

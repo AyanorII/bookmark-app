@@ -7,6 +7,21 @@
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
+export class BookmarkTagSchema extends BaseModel {
+  static $columns = ['id', 'bookmarkId', 'tagId', 'createdAt', 'updatedAt'] as const
+  $columns = BookmarkTagSchema.$columns
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare bookmarkId: number
+  @column()
+  declare tagId: number
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
 export class BookmarkSchema extends BaseModel {
   static $columns = ['id', 'userId', 'title', 'url', 'favicon', 'description', 'viewCount', 'isPinned', 'isArchived', 'archivedAt', 'lastViewedAt', 'createdAt', 'updatedAt'] as const
   $columns = BookmarkSchema.$columns
@@ -32,6 +47,23 @@ export class BookmarkSchema extends BaseModel {
   declare archivedAt: DateTime | null
   @column.dateTime()
   declare lastViewedAt: DateTime | null
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class TagSchema extends BaseModel {
+  static $columns = ['id', 'name', 'slug', 'userId', 'createdAt', 'updatedAt'] as const
+  $columns = TagSchema.$columns
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare name: string
+  @column()
+  declare slug: string
+  @column()
+  declare userId: number
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime | null
   @column.dateTime({ autoCreate: true, autoUpdate: true })

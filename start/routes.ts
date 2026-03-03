@@ -41,6 +41,14 @@ router
         router
           .patch('bookmarks/:id/view', [controllers.Bookmarks, 'incrementViewCount'])
           .as('bookmarks.incrementViewCount')
+        router
+          .put('bookmarks/:id/tags', [controllers.Bookmarks, 'updateTags'])
+          .as('bookmarks.updateTags')
+
+        router
+          .resource('tags', controllers.Tags)
+          .only(['index', 'store', 'update', 'destroy'])
+          .as('api.tags')
 
         router.resource('sessions', controllers.ApiSessions).only(['destroy']).as('api.sessions')
       })

@@ -18,6 +18,11 @@ export type ScannedRoutes = {
     'bookmarks.togglePin': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'bookmarks.toggleArchive': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'bookmarks.incrementViewCount': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'bookmarks.updateTags': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api_tags.index': { paramsTuple?: []; params?: {} }
+    'api_tags.store': { paramsTuple?: []; params?: {} }
+    'api_tags.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api_tags.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'api_sessions.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'session.destroy': { paramsTuple?: []; params?: {} }
   }
@@ -27,6 +32,7 @@ export type ScannedRoutes = {
     'session.create': { paramsTuple?: []; params?: {} }
     'bookmarks.index': { paramsTuple?: []; params?: {} }
     'bookmarks.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api_tags.index': { paramsTuple?: []; params?: {} }
   }
   HEAD: {
     'home': { paramsTuple?: []; params?: {} }
@@ -34,25 +40,31 @@ export type ScannedRoutes = {
     'session.create': { paramsTuple?: []; params?: {} }
     'bookmarks.index': { paramsTuple?: []; params?: {} }
     'bookmarks.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api_tags.index': { paramsTuple?: []; params?: {} }
   }
   POST: {
     'new_account.store': { paramsTuple?: []; params?: {} }
     'session.store': { paramsTuple?: []; params?: {} }
     'api_sessions.store': { paramsTuple?: []; params?: {} }
     'bookmarks.store': { paramsTuple?: []; params?: {} }
+    'api_tags.store': { paramsTuple?: []; params?: {} }
     'session.destroy': { paramsTuple?: []; params?: {} }
   }
   PUT: {
     'bookmarks.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'bookmarks.updateTags': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api_tags.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   PATCH: {
     'bookmarks.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'bookmarks.togglePin': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'bookmarks.toggleArchive': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'bookmarks.incrementViewCount': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api_tags.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   DELETE: {
     'bookmarks.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api_tags.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'api_sessions.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
 }

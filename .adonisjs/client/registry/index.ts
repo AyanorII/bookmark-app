@@ -90,6 +90,36 @@ const routes = {
     tokens: [{"old":"/api/bookmarks/:id/view","type":0,"val":"api","end":""},{"old":"/api/bookmarks/:id/view","type":0,"val":"bookmarks","end":""},{"old":"/api/bookmarks/:id/view","type":1,"val":"id","end":""},{"old":"/api/bookmarks/:id/view","type":0,"val":"view","end":""}],
     types: placeholder as Registry['bookmarks.incrementViewCount']['types'],
   },
+  'bookmarks.updateTags': {
+    methods: ["PUT"],
+    pattern: '/api/bookmarks/:id/tags',
+    tokens: [{"old":"/api/bookmarks/:id/tags","type":0,"val":"api","end":""},{"old":"/api/bookmarks/:id/tags","type":0,"val":"bookmarks","end":""},{"old":"/api/bookmarks/:id/tags","type":1,"val":"id","end":""},{"old":"/api/bookmarks/:id/tags","type":0,"val":"tags","end":""}],
+    types: placeholder as Registry['bookmarks.updateTags']['types'],
+  },
+  'api_tags.index': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/tags',
+    tokens: [{"old":"/api/tags","type":0,"val":"api","end":""},{"old":"/api/tags","type":0,"val":"tags","end":""}],
+    types: placeholder as Registry['api_tags.index']['types'],
+  },
+  'api_tags.store': {
+    methods: ["POST"],
+    pattern: '/api/tags',
+    tokens: [{"old":"/api/tags","type":0,"val":"api","end":""},{"old":"/api/tags","type":0,"val":"tags","end":""}],
+    types: placeholder as Registry['api_tags.store']['types'],
+  },
+  'api_tags.update': {
+    methods: ["PUT","PATCH"],
+    pattern: '/api/tags/:id',
+    tokens: [{"old":"/api/tags/:id","type":0,"val":"api","end":""},{"old":"/api/tags/:id","type":0,"val":"tags","end":""},{"old":"/api/tags/:id","type":1,"val":"id","end":""}],
+    types: placeholder as Registry['api_tags.update']['types'],
+  },
+  'api_tags.destroy': {
+    methods: ["DELETE"],
+    pattern: '/api/tags/:id',
+    tokens: [{"old":"/api/tags/:id","type":0,"val":"api","end":""},{"old":"/api/tags/:id","type":0,"val":"tags","end":""},{"old":"/api/tags/:id","type":1,"val":"id","end":""}],
+    types: placeholder as Registry['api_tags.destroy']['types'],
+  },
   'api_sessions.destroy': {
     methods: ["DELETE"],
     pattern: '/api/sessions/:id',

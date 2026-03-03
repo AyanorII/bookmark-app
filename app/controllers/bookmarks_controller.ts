@@ -1,7 +1,11 @@
 import Bookmark from '#models/bookmark'
 import BookmarkPolicy from '#policies/bookmark_policy'
 import BookmarkTransformer from '#transformers/bookmark_transformer'
-import { createBookmarkValidator, updateBookmarkValidator } from '#validators/bookmark'
+import {
+  createBookmarkValidator,
+  updateBookmarkTagsValidator,
+  updateBookmarkValidator,
+} from '#validators/bookmark'
 import type { HttpContext } from '@adonisjs/core/http'
 import { DateTime } from 'luxon'
 import db from '@adonisjs/lucid/services/db'
@@ -91,6 +95,26 @@ export default class BookmarksController {
       })
 
     const bookmark = await this.findBookmarkById(params.id, user.id)
+
+    return serialize(BookmarkTransformer.transform(bookmark))
+  }
+
+  async updateTags({ params, auth, request, serialize, response }: HttpContext) {
+    const user = auth.user!
+
+    const payload = await request.validateUsing(updateBookmarkTagsValidator)
+
+    const allowed = await user.related('tags').query().whereIn('id', payload.tags).select('id')
+    const allowedIds = allowed.map((tag) => tag.id)
+
+    if (allowedIds.length !== payload.tags.length) {
+      return response.forbidden({ message: 'One or more tags are invalid' })
+    }
+
+    const bookmark = await this.findBookmarkById(params.id, user.id)
+    await bookmark.related('tags').sync(allowedIds)
+
+    await bookmark.load('tags')
 
     return serialize(BookmarkTransformer.transform(bookmark))
   }

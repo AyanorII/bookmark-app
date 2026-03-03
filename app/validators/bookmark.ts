@@ -15,3 +15,7 @@ export const updateBookmarkValidator = vine.create({
   isPinned: vine.boolean().optional(),
   isArchived: vine.boolean().optional(),
 })
+
+export const updateBookmarkTagsValidator = vine.create({
+  tags: vine.array(vine.number()),
+})

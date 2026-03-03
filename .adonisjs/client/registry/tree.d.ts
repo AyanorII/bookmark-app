@@ -25,5 +25,12 @@ export interface ApiDefinition {
     togglePin: typeof routes['bookmarks.togglePin']
     toggleArchive: typeof routes['bookmarks.toggleArchive']
     incrementViewCount: typeof routes['bookmarks.incrementViewCount']
+    updateTags: typeof routes['bookmarks.updateTags']
+  }
+  apiTags: {
+    index: typeof routes['api_tags.index']
+    store: typeof routes['api_tags.store']
+    update: typeof routes['api_tags.update']
+    destroy: typeof routes['api_tags.destroy']
   }
 }
