@@ -1,73 +1,92 @@
-import { Form } from '@adonisjs/inertia/react'
+import { Form, Link } from '@adonisjs/inertia/react'
+import {
+  Button,
+  Card,
+  Container,
+  PasswordInput,
+  Stack,
+  Text,
+  TextInput,
+  Title,
+} from '@mantine/core'
+import { Logo } from '~/components/Logo'
 
 export default function Signup() {
   return (
-    <div className="form-container">
-      <div>
-        <h1> Signup </h1>
-        <p>Enter your details below to create your account</p>
-      </div>
-
-      <div>
-        <Form route="new_account.store">
-          {({ errors }) => (
-            <>
-              <div>
-                <label htmlFor="fullName">Full name</label>
-                <input
-                  type="text"
-                  name="fullName"
-                  id="fullName"
-                  data-invalid={errors.fullName ? 'true' : undefined}
-                />
-                {errors.fullName && <div>{errors.fullName}</div>}
-              </div>
-
-              <div>
-                <label htmlFor="email">Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  id="email"
-                  autoComplete="email"
-                  data-invalid={errors.email ? 'true' : undefined}
-                />
-                {errors.email && <div>{errors.email}</div>}
-              </div>
-
-              <div>
-                <label htmlFor="password">Password</label>
-                <input
-                  type="password"
-                  name="password"
-                  id="password"
-                  autoComplete="new-password"
-                  data-invalid={errors.password ? 'true' : undefined}
-                />
-                {errors.password && <div>{errors.password}</div>}
-              </div>
-
-              <div>
-                <label htmlFor="passwordConfirmation">Confirm password</label>
-                <input
-                  type="password"
-                  name="passwordConfirmation"
-                  id="passwordConfirmation"
-                  autoComplete="new-password"
-                  data-invalid={errors.passwordConfirmation ? 'true' : undefined}
-                />
-                {errors.passwordConfirmation && <div>{errors.passwordConfirmation}</div>}
-              </div>
-
-              <div>
-                <button type="submit" className="button">
-                  Sign up
-                </button>
-              </div>
-            </>
-          )}
-        </Form>
-      </div>
-    </div>
+    <Container h="100dvh">
+      <Stack justify="center" align="center" h="100%">
+        <Card withBorder px={32} py={40} bg="white" radius={12} maw={500}>
+          <Logo />
+          <Stack mt={32} gap={8} mb={32}>
+            <Title order={1} size="xl">
+              Create your account
+            </Title>
+            <Text c="dimmed" size="sm">
+              Join us and start saving your favorite links — organized, searchable, and always
+              within reach.
+            </Text>
+          </Stack>
+          <Form route="new_account.store">
+            {({ errors, clearErrors }) => {
+              return (
+                <Stack>
+                  <TextInput
+                    onChange={() => {
+                      if (errors.fullName) {
+                        clearErrors('fullName')
+                      }
+                    }}
+                    label="Full name"
+                    name="fullName"
+                    error={errors.fullName}
+                  />
+                  <TextInput
+                    onChange={() => {
+                      if (errors.email) {
+                        clearErrors('email')
+                      }
+                    }}
+                    label="Email address"
+                    type="email"
+                    name="email"
+                    error={errors.email}
+                  />
+                  <PasswordInput
+                    onChange={() => {
+                      if (errors.password) {
+                        clearErrors('password')
+                      }
+                    }}
+                    label="Password"
+                    name="password"
+                    error={errors.password}
+                  />
+                  <PasswordInput
+                    onChange={() => {
+                      if (errors.passwordConfirmation) {
+                        clearErrors('passwordConfirmation')
+                      }
+                    }}
+                    label="Confirm Password"
+                    name="passwordConfirmation"
+                    error={errors.passwordConfirmation ? 'Passwords do not match' : errors.password}
+                  />
+                  <Button type="submit">Create account</Button>
+                </Stack>
+              )
+            }}
+          </Form>
+          <Text c="dimmed" size="sm" mt={24} ta="center">
+            Already have an account?
+            <Link
+              route="session.create"
+              className="font-semibold text-gray-800 ml-2 hover:underline"
+            >
+              Log in
+            </Link>
+          </Text>
+        </Card>
+      </Stack>
+    </Container>
   )
 }

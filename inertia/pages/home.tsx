@@ -1,3 +1,6 @@
+import { Link } from '@adonisjs/inertia/react'
+import { Button } from '@mantine/core'
+
 export default function Home() {
   return (
     <>
@@ -25,6 +28,9 @@ export default function Home() {
           <p>Connect with developers building with AdonisJS every day</p>
         </a>
       </div>
+      <Link route="session.destroy">
+        <Button>Log out</Button>
+      </Link>
     </>
   )
 }

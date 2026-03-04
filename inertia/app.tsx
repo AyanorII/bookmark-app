@@ -1,4 +1,5 @@
 import './css/app.css'
+import '@mantine/core/styles.css'
 import { ReactElement } from 'react'
 import { client } from './client'
 import Layout from '~/layouts/default'
@@ -7,6 +8,8 @@ import { createRoot } from 'react-dom/client'
 import { createInertiaApp } from '@inertiajs/react'
 import { TuyauProvider } from '@adonisjs/inertia/react'
 import { resolvePageComponent } from '@adonisjs/inertia/helpers'
+import { MantineProvider } from '@mantine/core'
+import { theme } from './theme'
 
 const appName = import.meta.env.VITE_APP_NAME || 'AdonisJS'
 
@@ -22,7 +25,9 @@ createInertiaApp({
   setup({ el, App, props }) {
     createRoot(el).render(
       <TuyauProvider client={client}>
-        <App {...props} />
+        <MantineProvider theme={theme}>
+          <App {...props} />
+        </MantineProvider>
       </TuyauProvider>
     )
   },
