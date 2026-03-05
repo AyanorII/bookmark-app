@@ -1,15 +1,4 @@
-import {
-  Avatar,
-  Burger,
-  Button,
-  Group,
-  Menu,
-  Modal,
-  Stack,
-  Switch,
-  Text,
-  TextInput,
-} from '@mantine/core'
+import { Burger, Button, Group, Modal, Text, TextInput } from '@mantine/core'
 import { Logo } from './Logo'
 import { RiSearchLine } from 'react-icons/ri'
 import { router } from '@inertiajs/react'
@@ -18,8 +7,6 @@ import { FaPlus } from 'react-icons/fa6'
 import { useDisclosure } from '@mantine/hooks'
 import { BookmarkForm } from '~/domains/bookmarks/components/BookmarkForm'
 import { toast } from 'sonner'
-import { BsPalette } from 'react-icons/bs'
-import { LuLogOut } from 'react-icons/lu'
 import { UserMenu } from './UserMenu'
 
 type Props = {

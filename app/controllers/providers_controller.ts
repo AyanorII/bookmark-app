@@ -36,6 +36,7 @@ export default class ProvidersController {
       {
         email: githubUser.email,
         fullName: githubUser.name,
+        avatar: githubUser.avatarUrl,
         /**
          * Generate a random password since social users
          * won't use password-based login
@@ -43,6 +44,11 @@ export default class ProvidersController {
         password: crypto.randomUUID(),
       }
     )
+
+    if (user.avatar !== githubUser.avatarUrl) {
+      user.avatar = githubUser.avatarUrl
+      await user.save()
+    }
 
     await auth.use('web').login(user)
 

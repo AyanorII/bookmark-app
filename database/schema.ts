@@ -71,7 +71,7 @@ export class TagSchema extends BaseModel {
 }
 
 export class UserSchema extends BaseModel {
-  static $columns = ['id', 'fullName', 'email', 'password', 'createdAt', 'updatedAt'] as const
+  static $columns = ['id', 'fullName', 'email', 'password', 'createdAt', 'updatedAt', 'avatar'] as const
   $columns = UserSchema.$columns
   @column({ isPrimary: true })
   declare id: number
@@ -85,4 +85,6 @@ export class UserSchema extends BaseModel {
   declare createdAt: DateTime
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
+  @column()
+  declare avatar: string | null
 }

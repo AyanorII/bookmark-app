@@ -12,12 +12,12 @@ export const UserMenu = () => {
   return (
     <Menu closeOnItemClick={false} withArrow>
       <Menu.Target>
-        <Avatar />
+        <Avatar src={user.avatar} />
       </Menu.Target>
       <Menu.Dropdown>
         <Menu.Item>
           <Group gap={12}>
-            <Avatar />
+            <Avatar src={user.avatar} />
             <Stack gap={0}>
               <Text size="sm">{user.fullName}</Text>
               <Text size="xs" c="dimmed">
