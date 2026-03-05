@@ -9,11 +9,12 @@ import {
 import type { HttpContext } from '@adonisjs/core/http'
 import { DateTime } from 'luxon'
 import db from '@adonisjs/lucid/services/db'
+import { BookmarkService } from '#services/bookmark_service'
 
 export default class BookmarksController {
   async index({ serialize, auth }: HttpContext) {
     const user = auth.user!
-    const bookmarks = await Bookmark.query().where('user_id', user.id).orderBy('created_at', 'desc')
+    const bookmarks = await BookmarkService.listForUser(user.id)
 
     return serialize(BookmarkTransformer.transform(bookmarks))
   }
@@ -31,7 +32,7 @@ export default class BookmarksController {
     await bouncer.with(BookmarkPolicy).authorize('create')
 
     const payload = await request.validateUsing(createBookmarkValidator)
-    const bookmark = await Bookmark.create({ ...payload, userId: user.id })
+    const bookmark = await BookmarkService.createBookmark(user.id, payload)
 
     return serialize(BookmarkTransformer.transform(bookmark))
   }

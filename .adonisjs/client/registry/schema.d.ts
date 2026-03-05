@@ -7,17 +7,6 @@ import type { InferInput } from '@vinejs/vine/types'
 export type ParamValue = string | number | bigint | boolean
 
 export interface Registry {
-  'home': {
-    methods: ["GET","HEAD"]
-    pattern: '/'
-    types: {
-      body: {}
-      paramsTuple: []
-      params: {}
-      query: {}
-      response: unknown
-    }
-  }
   'new_account.create': {
     methods: ["GET","HEAD"]
     pattern: '/signup'
@@ -128,7 +117,7 @@ export interface Registry {
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/bookmarks_controller').default['destroy']>>>
     }
   }
-  'bookmarks.togglePin': {
+  'bookmarks.pin': {
     methods: ["PATCH"]
     pattern: '/api/bookmarks/:id/pin'
     types: {
@@ -139,7 +128,7 @@ export interface Registry {
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/bookmarks_controller').default['togglePin']>>>
     }
   }
-  'bookmarks.toggleArchive': {
+  'bookmarks.archive': {
     methods: ["PATCH"]
     pattern: '/api/bookmarks/:id/archive'
     types: {
@@ -150,7 +139,7 @@ export interface Registry {
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/bookmarks_controller').default['toggleArchive']>>>
     }
   }
-  'bookmarks.incrementViewCount': {
+  'bookmarks.view': {
     methods: ["PATCH"]
     pattern: '/api/bookmarks/:id/view'
     types: {
@@ -161,7 +150,7 @@ export interface Registry {
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/bookmarks_controller').default['incrementViewCount']>>>
     }
   }
-  'bookmarks.updateTags': {
+  'bookmarks.tags': {
     methods: ["PUT"]
     pattern: '/api/bookmarks/:id/tags'
     types: {
@@ -172,7 +161,7 @@ export interface Registry {
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/bookmarks_controller').default['updateTags']>>>
     }
   }
-  'api_tags.index': {
+  'tags.index': {
     methods: ["GET","HEAD"]
     pattern: '/api/tags'
     types: {
@@ -183,7 +172,7 @@ export interface Registry {
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/tags_controller').default['index']>>>
     }
   }
-  'api_tags.store': {
+  'tags.store': {
     methods: ["POST"]
     pattern: '/api/tags'
     types: {
@@ -194,7 +183,7 @@ export interface Registry {
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/tags_controller').default['store']>>>
     }
   }
-  'api_tags.update': {
+  'tags.update': {
     methods: ["PUT","PATCH"]
     pattern: '/api/tags/:id'
     types: {
@@ -205,7 +194,7 @@ export interface Registry {
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/tags_controller').default['update']>>>
     }
   }
-  'api_tags.destroy': {
+  'tags.destroy': {
     methods: ["DELETE"]
     pattern: '/api/tags/:id'
     types: {
@@ -225,6 +214,17 @@ export interface Registry {
       params: { id: ParamValue }
       query: {}
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/api_sessions_controller').default['destroy']>>>
+    }
+  }
+  'home': {
+    methods: ["GET","HEAD"]
+    pattern: '/'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/home_controller').default['index']>>>
     }
   }
   'session.destroy': {

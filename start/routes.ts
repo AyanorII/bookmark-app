@@ -11,8 +11,6 @@ import { middleware } from '#start/kernel'
 import { controllers } from '#generated/controllers'
 import router from '@adonisjs/core/services/router'
 
-router.on('/').renderInertia('home', {}).as('home')
-
 router
   .group(() => {
     router.get('signup', [controllers.NewAccount, 'create'])
@@ -32,23 +30,16 @@ router
     router
       .group(() => {
         router.resource('bookmarks', controllers.Bookmarks).apiOnly()
-        router
-          .patch('bookmarks/:id/pin', [controllers.Bookmarks, 'togglePin'])
-          .as('bookmarks.togglePin')
+        router.patch('bookmarks/:id/pin', [controllers.Bookmarks, 'togglePin']).as('bookmarks.pin')
         router
           .patch('bookmarks/:id/archive', [controllers.Bookmarks, 'toggleArchive'])
-          .as('bookmarks.toggleArchive')
+          .as('bookmarks.archive')
         router
           .patch('bookmarks/:id/view', [controllers.Bookmarks, 'incrementViewCount'])
-          .as('bookmarks.incrementViewCount')
-        router
-          .put('bookmarks/:id/tags', [controllers.Bookmarks, 'updateTags'])
-          .as('bookmarks.updateTags')
+          .as('bookmarks.view')
+        router.put('bookmarks/:id/tags', [controllers.Bookmarks, 'updateTags']).as('bookmarks.tags')
 
-        router
-          .resource('tags', controllers.Tags)
-          .only(['index', 'store', 'update', 'destroy'])
-          .as('api.tags')
+        router.resource('tags', controllers.Tags).only(['index', 'store', 'update', 'destroy'])
 
         router.resource('sessions', controllers.ApiSessions).only(['destroy']).as('api.sessions')
       })
@@ -58,6 +49,7 @@ router
 
 router
   .group(() => {
+    router.get('/', [controllers.Home, 'index']).as('home')
     router.post('logout', [controllers.Session, 'destroy'])
   })
   .use(middleware.auth())

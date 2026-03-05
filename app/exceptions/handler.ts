@@ -32,7 +32,7 @@ export default class HttpExceptionHandler extends ExceptionHandler {
   async handle(error: any, ctx: HttpContext) {
     const wantsJson =
       ctx.request.url().startsWith('/api') ||
-      ctx.request.accepts(['json']) === 'json' ||
+      ctx.request.accepts(['html', 'json']) === 'json' ||
       ctx.request.header('accept')?.includes('application/json')
 
     if (wantsJson) {

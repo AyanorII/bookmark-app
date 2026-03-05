@@ -15,11 +15,15 @@ export default class BookmarkTransformer extends BaseTransformer<Bookmark> {
       'isArchived',
       'archivedAt',
       'lastViewedAt',
+      'createdAt',
     ])
 
     return {
       ...bookmarkSerializer,
-      tags: this.resource.tags ? TagTransformer.transform(this.resource.tags) : [],
+      // tags: this.resource.tags
+      //   ? TagTransformer.transform(this.resource.tags)
+      //   : TagTransformer.transform([]),
+      tags: TagTransformer.transform(this.resource.tags || []),
     }
   }
 }

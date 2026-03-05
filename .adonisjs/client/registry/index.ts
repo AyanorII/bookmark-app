@@ -6,12 +6,6 @@ import type { ApiDefinition } from './tree.d.ts'
 const placeholder: any = {}
 
 const routes = {
-  'home': {
-    methods: ["GET","HEAD"],
-    pattern: '/',
-    tokens: [{"old":"/","type":0,"val":"/","end":""}],
-    types: placeholder as Registry['home']['types'],
-  },
   'new_account.create': {
     methods: ["GET","HEAD"],
     pattern: '/signup',
@@ -72,59 +66,65 @@ const routes = {
     tokens: [{"old":"/api/bookmarks/:id","type":0,"val":"api","end":""},{"old":"/api/bookmarks/:id","type":0,"val":"bookmarks","end":""},{"old":"/api/bookmarks/:id","type":1,"val":"id","end":""}],
     types: placeholder as Registry['bookmarks.destroy']['types'],
   },
-  'bookmarks.togglePin': {
+  'bookmarks.pin': {
     methods: ["PATCH"],
     pattern: '/api/bookmarks/:id/pin',
     tokens: [{"old":"/api/bookmarks/:id/pin","type":0,"val":"api","end":""},{"old":"/api/bookmarks/:id/pin","type":0,"val":"bookmarks","end":""},{"old":"/api/bookmarks/:id/pin","type":1,"val":"id","end":""},{"old":"/api/bookmarks/:id/pin","type":0,"val":"pin","end":""}],
-    types: placeholder as Registry['bookmarks.togglePin']['types'],
+    types: placeholder as Registry['bookmarks.pin']['types'],
   },
-  'bookmarks.toggleArchive': {
+  'bookmarks.archive': {
     methods: ["PATCH"],
     pattern: '/api/bookmarks/:id/archive',
     tokens: [{"old":"/api/bookmarks/:id/archive","type":0,"val":"api","end":""},{"old":"/api/bookmarks/:id/archive","type":0,"val":"bookmarks","end":""},{"old":"/api/bookmarks/:id/archive","type":1,"val":"id","end":""},{"old":"/api/bookmarks/:id/archive","type":0,"val":"archive","end":""}],
-    types: placeholder as Registry['bookmarks.toggleArchive']['types'],
+    types: placeholder as Registry['bookmarks.archive']['types'],
   },
-  'bookmarks.incrementViewCount': {
+  'bookmarks.view': {
     methods: ["PATCH"],
     pattern: '/api/bookmarks/:id/view',
     tokens: [{"old":"/api/bookmarks/:id/view","type":0,"val":"api","end":""},{"old":"/api/bookmarks/:id/view","type":0,"val":"bookmarks","end":""},{"old":"/api/bookmarks/:id/view","type":1,"val":"id","end":""},{"old":"/api/bookmarks/:id/view","type":0,"val":"view","end":""}],
-    types: placeholder as Registry['bookmarks.incrementViewCount']['types'],
+    types: placeholder as Registry['bookmarks.view']['types'],
   },
-  'bookmarks.updateTags': {
+  'bookmarks.tags': {
     methods: ["PUT"],
     pattern: '/api/bookmarks/:id/tags',
     tokens: [{"old":"/api/bookmarks/:id/tags","type":0,"val":"api","end":""},{"old":"/api/bookmarks/:id/tags","type":0,"val":"bookmarks","end":""},{"old":"/api/bookmarks/:id/tags","type":1,"val":"id","end":""},{"old":"/api/bookmarks/:id/tags","type":0,"val":"tags","end":""}],
-    types: placeholder as Registry['bookmarks.updateTags']['types'],
+    types: placeholder as Registry['bookmarks.tags']['types'],
   },
-  'api_tags.index': {
+  'tags.index': {
     methods: ["GET","HEAD"],
     pattern: '/api/tags',
     tokens: [{"old":"/api/tags","type":0,"val":"api","end":""},{"old":"/api/tags","type":0,"val":"tags","end":""}],
-    types: placeholder as Registry['api_tags.index']['types'],
+    types: placeholder as Registry['tags.index']['types'],
   },
-  'api_tags.store': {
+  'tags.store': {
     methods: ["POST"],
     pattern: '/api/tags',
     tokens: [{"old":"/api/tags","type":0,"val":"api","end":""},{"old":"/api/tags","type":0,"val":"tags","end":""}],
-    types: placeholder as Registry['api_tags.store']['types'],
+    types: placeholder as Registry['tags.store']['types'],
   },
-  'api_tags.update': {
+  'tags.update': {
     methods: ["PUT","PATCH"],
     pattern: '/api/tags/:id',
     tokens: [{"old":"/api/tags/:id","type":0,"val":"api","end":""},{"old":"/api/tags/:id","type":0,"val":"tags","end":""},{"old":"/api/tags/:id","type":1,"val":"id","end":""}],
-    types: placeholder as Registry['api_tags.update']['types'],
+    types: placeholder as Registry['tags.update']['types'],
   },
-  'api_tags.destroy': {
+  'tags.destroy': {
     methods: ["DELETE"],
     pattern: '/api/tags/:id',
     tokens: [{"old":"/api/tags/:id","type":0,"val":"api","end":""},{"old":"/api/tags/:id","type":0,"val":"tags","end":""},{"old":"/api/tags/:id","type":1,"val":"id","end":""}],
-    types: placeholder as Registry['api_tags.destroy']['types'],
+    types: placeholder as Registry['tags.destroy']['types'],
   },
   'api_sessions.destroy': {
     methods: ["DELETE"],
     pattern: '/api/sessions/:id',
     tokens: [{"old":"/api/sessions/:id","type":0,"val":"api","end":""},{"old":"/api/sessions/:id","type":0,"val":"sessions","end":""},{"old":"/api/sessions/:id","type":1,"val":"id","end":""}],
     types: placeholder as Registry['api_sessions.destroy']['types'],
+  },
+  'home': {
+    methods: ["GET","HEAD"],
+    pattern: '/',
+    tokens: [{"old":"/","type":0,"val":"/","end":""}],
+    types: placeholder as Registry['home']['types'],
   },
   'session.destroy': {
     methods: ["POST"],

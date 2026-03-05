@@ -7,6 +7,9 @@ export default class TagTransformer extends BaseTransformer<Tag> {
   }
 
   async withBookmarksCount() {
-    return { ...this.toObject(), bookmarksCount: this.resource.$extras.bookmarks_count || 0 }
+    return {
+      ...this.toObject(),
+      bookmarksCount: (this.resource.$extras.bookmarks_count as number) || 0,
+    }
   }
 }

@@ -2,7 +2,6 @@
 import type { routes } from './index.ts'
 
 export interface ApiDefinition {
-  home: typeof routes['home']
   newAccount: {
     create: typeof routes['new_account.create']
     store: typeof routes['new_account.store']
@@ -22,15 +21,16 @@ export interface ApiDefinition {
     show: typeof routes['bookmarks.show']
     update: typeof routes['bookmarks.update']
     destroy: typeof routes['bookmarks.destroy']
-    togglePin: typeof routes['bookmarks.togglePin']
-    toggleArchive: typeof routes['bookmarks.toggleArchive']
-    incrementViewCount: typeof routes['bookmarks.incrementViewCount']
-    updateTags: typeof routes['bookmarks.updateTags']
+    pin: typeof routes['bookmarks.pin']
+    archive: typeof routes['bookmarks.archive']
+    view: typeof routes['bookmarks.view']
+    tags: typeof routes['bookmarks.tags']
   }
-  apiTags: {
-    index: typeof routes['api_tags.index']
-    store: typeof routes['api_tags.store']
-    update: typeof routes['api_tags.update']
-    destroy: typeof routes['api_tags.destroy']
+  tags: {
+    index: typeof routes['tags.index']
+    store: typeof routes['tags.store']
+    update: typeof routes['tags.update']
+    destroy: typeof routes['tags.destroy']
   }
+  home: typeof routes['home']
 }

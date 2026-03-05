@@ -1,7 +1,7 @@
 import './css/app.css'
 import '@mantine/core/styles.css'
 import { ReactElement } from 'react'
-import { client } from './client'
+import { client, queryClient } from './client'
 import Layout from '~/layouts/default'
 import { Data } from '@generated/data'
 import { createRoot } from 'react-dom/client'
@@ -10,6 +10,7 @@ import { TuyauProvider } from '@adonisjs/inertia/react'
 import { resolvePageComponent } from '@adonisjs/inertia/helpers'
 import { MantineProvider } from '@mantine/core'
 import { theme } from './theme'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 const appName = import.meta.env.VITE_APP_NAME || 'AdonisJS'
 
@@ -25,9 +26,11 @@ createInertiaApp({
   setup({ el, App, props }) {
     createRoot(el).render(
       <TuyauProvider client={client}>
-        <MantineProvider theme={theme}>
-          <App {...props} />
-        </MantineProvider>
+        <QueryClientProvider client={queryClient}>
+          <MantineProvider theme={theme}>
+            <App {...props} />
+          </MantineProvider>
+        </QueryClientProvider>
       </TuyauProvider>
     )
   },

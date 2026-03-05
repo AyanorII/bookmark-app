@@ -2,7 +2,6 @@ import { Data } from '@generated/data'
 import { toast, Toaster } from 'sonner'
 import { usePage } from '@inertiajs/react'
 import { ReactElement, useEffect } from 'react'
-import { Form, Link } from '@adonisjs/inertia/react'
 
 export default function Layout({ children }: { children: ReactElement<Data.SharedProps> }) {
   useEffect(() => {
@@ -16,7 +15,7 @@ export default function Layout({ children }: { children: ReactElement<Data.Share
   return (
     <>
       <main className="min-h-screen bg-[#E8F0EF]">{children}</main>
-      <Toaster position="top-center" richColors />
+      <Toaster position="bottom-right" richColors />
     </>
   )
 }
