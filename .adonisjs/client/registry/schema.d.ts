@@ -51,6 +51,28 @@ export interface Registry {
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/session_controller').default['store']>>>
     }
   }
+  'github.redirect': {
+    methods: ["GET","HEAD"]
+    pattern: '/github/redirect'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+    }
+  }
+  'providers.github': {
+    methods: ["GET","HEAD"]
+    pattern: '/github/callback'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/providers_controller').default['github']>>>
+    }
+  }
   'api_sessions.store': {
     methods: ["POST"]
     pattern: '/api/sessions'

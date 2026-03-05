@@ -10,6 +10,7 @@
 import { middleware } from '#start/kernel'
 import { controllers } from '#generated/controllers'
 import router from '@adonisjs/core/services/router'
+import logger from '@adonisjs/core/services/logger'
 
 router
   .group(() => {
@@ -20,6 +21,15 @@ router
     router.post('login', [controllers.Session, 'store'])
   })
   .use(middleware.guest())
+
+router
+  .get('/github/redirect', ({ ally }) => {
+    logger.info('Redirecting to GitHub for authentication')
+    return ally.use('github').redirect()
+  })
+  .as('github.redirect')
+
+router.get('/github/callback', [controllers.Providers, 'github'])
 
 router
   .group(() => {

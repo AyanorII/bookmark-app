@@ -11,6 +11,12 @@ export interface ApiDefinition {
     store: typeof routes['session.store']
     destroy: typeof routes['session.destroy']
   }
+  github: {
+    redirect: typeof routes['github.redirect']
+  }
+  providers: {
+    github: typeof routes['providers.github']
+  }
   apiSessions: {
     store: typeof routes['api_sessions.store']
     destroy: typeof routes['api_sessions.destroy']

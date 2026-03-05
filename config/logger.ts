@@ -1,6 +1,6 @@
 import env from '#start/env'
 import app from '@adonisjs/core/services/app'
-import { defineConfig, syncDestination, targets } from '@adonisjs/core/logger'
+import { defineConfig, syncDestination } from '@adonisjs/core/logger'
 
 const loggerConfig = defineConfig({
   /**
@@ -33,9 +33,17 @@ const loggerConfig = defineConfig({
       /**
        * Configure where logs are written.
        */
-      transport: {
-        targets: [targets.file({ destination: 1 })],
-      },
+      transport:
+        env.get('NODE_ENV') === 'development'
+          ? {
+              target: 'pino-pretty',
+              options: {
+                colorize: true,
+                translateTime: 'HH:MM:ss.l',
+                ignore: 'pid,hostname',
+              },
+            }
+          : undefined,
     },
   },
 })

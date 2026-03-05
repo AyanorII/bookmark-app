@@ -30,6 +30,18 @@ const routes = {
     tokens: [{"old":"/login","type":0,"val":"login","end":""}],
     types: placeholder as Registry['session.store']['types'],
   },
+  'github.redirect': {
+    methods: ["GET","HEAD"],
+    pattern: '/github/redirect',
+    tokens: [{"old":"/github/redirect","type":0,"val":"github","end":""},{"old":"/github/redirect","type":0,"val":"redirect","end":""}],
+    types: placeholder as Registry['github.redirect']['types'],
+  },
+  'providers.github': {
+    methods: ["GET","HEAD"],
+    pattern: '/github/callback',
+    tokens: [{"old":"/github/callback","type":0,"val":"github","end":""},{"old":"/github/callback","type":0,"val":"callback","end":""}],
+    types: placeholder as Registry['providers.github']['types'],
+  },
   'api_sessions.store': {
     methods: ["POST"],
     pattern: '/api/sessions',

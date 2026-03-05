@@ -8,6 +8,8 @@ export type ScannedRoutes = {
     'new_account.store': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
     'session.store': { paramsTuple?: []; params?: {} }
+    'github.redirect': { paramsTuple?: []; params?: {} }
+    'providers.github': { paramsTuple?: []; params?: {} }
     'api_sessions.store': { paramsTuple?: []; params?: {} }
     'bookmarks.index': { paramsTuple?: []; params?: {} }
     'bookmarks.store': { paramsTuple?: []; params?: {} }
@@ -29,6 +31,8 @@ export type ScannedRoutes = {
   GET: {
     'new_account.create': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
+    'github.redirect': { paramsTuple?: []; params?: {} }
+    'providers.github': { paramsTuple?: []; params?: {} }
     'bookmarks.index': { paramsTuple?: []; params?: {} }
     'bookmarks.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'tags.index': { paramsTuple?: []; params?: {} }
@@ -37,6 +41,8 @@ export type ScannedRoutes = {
   HEAD: {
     'new_account.create': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
+    'github.redirect': { paramsTuple?: []; params?: {} }
+    'providers.github': { paramsTuple?: []; params?: {} }
     'bookmarks.index': { paramsTuple?: []; params?: {} }
     'bookmarks.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'tags.index': { paramsTuple?: []; params?: {} }

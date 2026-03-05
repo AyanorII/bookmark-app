@@ -3,12 +3,15 @@ import {
   Button,
   Card,
   Container,
+  Divider,
   PasswordInput,
   Stack,
   Text,
   TextInput,
   Title,
 } from '@mantine/core'
+import { FaGithub } from 'react-icons/fa6'
+import { urlFor } from '~/client'
 import { Logo } from '~/components/Logo'
 
 export default function Login() {
@@ -27,7 +30,6 @@ export default function Login() {
           </Stack>
           <Form route="session.store">
             {({ errors, clearErrors }) => {
-              console.log('🚀 ~ Login ~ errors:', errors)
               return (
                 <Stack>
                   <TextInput
@@ -58,6 +60,15 @@ export default function Login() {
               )
             }}
           </Form>
+          <Divider my={24} label="Or continue with" labelPosition="center" />
+          <Button
+            component="a"
+            href={urlFor('github.redirect')}
+            leftSection={<FaGithub />}
+            color="dark"
+          >
+            GitHub
+          </Button>
           {/* TODO: Add forgot password link */}
           <Text c="dimmed" size="sm" mt={24} ta="center">
             Don't have an account?

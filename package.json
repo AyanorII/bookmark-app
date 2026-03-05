@@ -63,6 +63,7 @@
     "youch": "^4.1.0"
   },
   "dependencies": {
+    "@adonisjs/ally": "^6.0.0-next.0",
     "@adonisjs/auth": "^10.0.0",
     "@adonisjs/bouncer": "^4.0.0-next.2",
     "@adonisjs/core": "^7.0.0",
