@@ -5,6 +5,8 @@ import db from '@adonisjs/lucid/services/db'
 import urlMetadata from 'url-metadata'
 import { type Data } from '../../.adonisjs/client/data.js'
 import { type TransactionClientContract } from '@adonisjs/lucid/types/database'
+import string from '@adonisjs/core/helpers/string'
+import logger from '@adonisjs/core/services/logger'
 
 export type BookmarkListFilters = {
   archived?: boolean
@@ -163,59 +165,29 @@ export class BookmarkService {
   }
 
   /**
-   * Resolves an array of tag inputs, which can be a mix of existing tag IDs and
-   * new tag names, into an array of valid tag IDs. Existing tag IDs are validated
-   * against the database to ensure they belong to the user, while new tag names
-   * are created if they don't already exist. The method returns a unique set of tag
-   * IDs that can be associated with a bookmark.
-   * @param userId The ID of the user to whom the tags belong, used for validating
-   * existing tag IDs and creating new tags.
-   * @param inputs An array of tag inputs, which can include both existing tag IDs
-   * (as numbers or numeric strings) and new tag names (as strings).
-   * @param trx The database transaction object to ensure all operations are performed
-   *  within the same transaction context.
-   * @returns A promise that resolves to an array of valid tag IDs corresponding to the provided inputs.
-   * @throws Will log an error if database operations fail, but will not throw an exception to the caller.
+   * Resolves an array of tag names to their corresponding tag IDs for a given user. If a tag does not exist, it will be created.
+   * This method runs within a database transaction to ensure atomicity of tag creation and retrieval.
+   * @param userId The ID of the user for whom to resolve tag IDs.
+   * @param inputs An array of tag names to resolve.
+   * @param trx The database transaction client to use for queries and operations.
+   * @returns An array of tag IDs corresponding to the provided tag names.
    */
   private static async resolveTagIds(
     userId: number,
     inputs: (CreateBookmarkValidator | UpdateBookmarkValidator)['tags'],
     trx: TransactionClientContract
   ): Promise<Data.Tag['id'][]> {
-    // Sanitize inputs to ensure they are all numbers
-    const existingTagIds = inputs
-      ?.filter((tag): tag is number => {
-        return typeof tag === 'number' || /^\d+$/.test(String(tag))
-      })
-      .map(Number)
-
-    const newNames =
-      inputs
-        ?.filter((tag): tag is string => {
-          return typeof tag === 'string' && Number.isNaN(Number(tag))
-        })
-        .map((name) => name.trim())
-        .filter(Boolean) || []
-
-    let allowedExisting: number[] = []
-    if (existingTagIds?.length) {
-      const rows = await Tag.query({ client: trx })
-        .where('user_id', userId)
-        .whereIn('id', existingTagIds)
-        .select('id')
-
-      allowedExisting = rows.map((row) => row.id)
-    }
-
     const tags = await Tag.fetchOrCreateMany(
-      'name',
-      newNames.map((name) => ({ name, userId })),
+      'slug',
+      inputs?.map((name) => {
+        logger.info(string.slug(name))
+
+        return { name, slug: string.slug(name), userId }
+      }) || [],
       { client: trx }
     )
 
-    const createdOrFoundIds = tags.map((tag) => tag.id)
-
-    return Array.from(new Set([...allowedExisting, ...createdOrFoundIds]))
+    return tags.map((tag) => tag.id)
   }
 }
 

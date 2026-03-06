@@ -7,10 +7,7 @@ import type { CreateBookmarkValidator } from '#validators/bookmark'
 import { router } from '@inertiajs/react'
 import { Data } from '@generated/data'
 import { useEffect } from 'react'
-import {
-  CreateBookmarkField,
-  useCreateBookmarkMutation,
-} from '../api/mutations/useCreateBookmarkMutation'
+import { useCreateBookmarkMutation } from '../api/mutations/useCreateBookmarkMutation'
 import { useUpdateBookmarkMutation } from '../api/mutations/useUpdateBookmarkMutation'
 
 type BookmarkFormProps = {
@@ -44,16 +41,8 @@ export const BookmarkForm = ({ bookmark, onSuccess, onCancel }: BookmarkFormProp
   useEffect(() => {
     const error = bookmark ? updateError : createError
 
-    if (error?.response?.errors.length) {
-      const errors = error.response.errors.reduce(
-        (acc, curr) => {
-          acc[curr.field as CreateBookmarkField] = curr.message
-          return acc
-        },
-        {} as Record<CreateBookmarkField, string>
-      )
-
-      form.setErrors(errors)
+    if (error?.response?.errors) {
+      form.setErrors(error?.response?.errors)
     }
   }, [updateError, createError])
 

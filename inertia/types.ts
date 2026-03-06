@@ -5,14 +5,12 @@ import { type JSONDataTypes } from '@adonisjs/core/types/transformers'
 export type InertiaProps<T extends JSONDataTypes = {}> = PropsWithChildren<Data.SharedProps & T>
 
 export type VineFieldError<Field extends string = string> = {
-  message: string
-  rule: string
-  field: Field
+  [field in Field]?: string
 }
 
 export type ValidationErrorResponse<Field extends string = string> = {
   message: string
-  errors: VineFieldError<Field>[]
+  errors: VineFieldError<Field>
 }
 
 export type TuyauError<T> = {

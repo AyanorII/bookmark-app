@@ -51,9 +51,17 @@ export default class HttpExceptionHandler extends ExceptionHandler {
 
       // Validation errors
       if (status === 422) {
-        return ctx.response.status(422).json({
-          message: error.message ?? 'Validation failed',
-          errors: error.messages ?? error,
+        const formatted: Record<string, string> = {}
+
+        for (const err of error.messages as { field: string; message: string }[]) {
+          if (!formatted[err.field]) {
+            formatted[err.field] = err.message
+          }
+        }
+
+        return ctx.response.status(422).send({
+          message: 'Validation failed',
+          errors: formatted,
         })
       }
 
