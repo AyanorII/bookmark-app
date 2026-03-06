@@ -1,6 +1,7 @@
 import env from '#start/env'
 import app from '@adonisjs/core/services/app'
 import { defineConfig } from '@adonisjs/core/http'
+import proxyAddr from 'proxy-addr'
 
 /**
  * The app key is used for encrypting cookies, generating signed URLs,
@@ -77,4 +78,6 @@ export const http = defineConfig({
      */
     sameSite: 'lax',
   },
+
+  trustProxy: proxyAddr.compile(['loopback', 'uniquelocal']),
 })
