@@ -6,7 +6,6 @@ import urlMetadata from 'url-metadata'
 import { type Data } from '../../.adonisjs/client/data.js'
 import { type TransactionClientContract } from '@adonisjs/lucid/types/database'
 import string from '@adonisjs/core/helpers/string'
-import logger from '@adonisjs/core/services/logger'
 
 export type BookmarkListFilters = {
   archived?: boolean
@@ -180,9 +179,7 @@ export class BookmarkService {
     const tags = await Tag.fetchOrCreateMany(
       'slug',
       inputs?.map((name) => {
-        logger.info(string.slug(name))
-
-        return { name, slug: string.slug(name), userId }
+        return { name, slug: string.slug(name.toLowerCase()), userId }
       }) || [],
       { client: trx }
     )

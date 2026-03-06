@@ -37,16 +37,20 @@ export default class BookmarksController {
     return serialize(BookmarkTransformer.transform(bookmark))
   }
 
-  async update({ params, auth, request, serialize, bouncer }: HttpContext) {
+  async update({ params, auth, request, serialize, bouncer, response }: HttpContext) {
     const user = auth.user!
 
     const bookmark = await this.findBookmarkById(params.id, user.id)
     await bouncer.with(BookmarkPolicy).authorize('edit', bookmark)
 
     const payload = await request.validateUsing(updateBookmarkValidator)
-    const updatedBookmark = await BookmarkService.updateBookmark(bookmark, payload)
 
-    return serialize(BookmarkTransformer.transform(updatedBookmark))
+    try {
+      const updatedBookmark = await BookmarkService.updateBookmark(bookmark, payload)
+      return serialize(BookmarkTransformer.transform(updatedBookmark))
+    } catch (_err) {
+      return response.internalServerError()
+    }
   }
 
   async destroy({ params, auth, bouncer, response }: HttpContext) {
