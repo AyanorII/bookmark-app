@@ -1,36 +1,7 @@
-import { Form, Link, LinkProps } from '@adonisjs/inertia/react'
-import {
-  AppShell,
-  Avatar,
-  Badge,
-  Burger,
-  Button,
-  Center,
-  Checkbox,
-  Grid,
-  Group,
-  Menu,
-  MenuDropdown,
-  NavLink,
-  Spoiler,
-  Stack,
-  Text,
-  TextInput,
-  Title,
-} from '@mantine/core'
+import { AppShell, Group, Title } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { RiHome6Line, RiSearchLine } from 'react-icons/ri'
-import { LuArchive, LuEye } from 'react-icons/lu'
-import { useQuery } from '@tanstack/react-query'
-import { api } from '~/client'
-import { router, usePage } from '@inertiajs/react'
 import { InertiaProps } from '~/types'
 import { Data } from '@generated/data'
-import { cn } from '~/lib/utils'
-import { urlFor } from '../client'
-import { Logo } from '~/components/Logo'
-import { FaCheck, FaRegClock } from 'react-icons/fa6'
-import { BiSortAlt2 } from 'react-icons/bi'
 import { NavLinks } from '~/components/NavLinks'
 import { BookmarksGrid } from '~/domains/bookmarks/components/BookmarksGrid'
 import { useBookmarkQueryFilters } from '~/domains/bookmarks/hooks/useBookmarkQueryFilters'

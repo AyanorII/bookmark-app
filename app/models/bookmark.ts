@@ -1,7 +1,7 @@
 import { BookmarkSchema } from '#database/schema'
-import { belongsTo, column, hasMany, manyToMany } from '@adonisjs/lucid/orm'
+import { belongsTo, column, manyToMany } from '@adonisjs/lucid/orm'
 import User from './user.ts'
-import type { BelongsTo, HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
+import type { BelongsTo, ManyToMany } from '@adonisjs/lucid/types/relations'
 import { DateTime } from 'luxon'
 import Tag from './tag.ts'
 

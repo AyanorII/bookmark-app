@@ -29,7 +29,10 @@ export default class HttpExceptionHandler extends ExceptionHandler {
    * The method is used for handling errors and returning
    * response to the client
    */
-  async handle(error: any, ctx: HttpContext) {
+  async handle(
+    error: { status?: number; message?: string; code?: string; messages?: unknown },
+    ctx: HttpContext
+  ) {
     const wantsJson =
       ctx.request.url().startsWith('/api') ||
       ctx.request.accepts(['html', 'json']) === 'json' ||

@@ -11,10 +11,7 @@ import {
   CreateBookmarkField,
   useCreateBookmarkMutation,
 } from '../api/mutations/useCreateBookmarkMutation'
-import {
-  UpdateBookmarkField,
-  useUpdateBookmarkMutation,
-} from '../api/mutations/useUpdateBookmarkMutation'
+import { useUpdateBookmarkMutation } from '../api/mutations/useUpdateBookmarkMutation'
 
 type BookmarkFormProps = {
   bookmark?: Data.Bookmark

@@ -4,7 +4,7 @@ import { type UpdateBookmarkValidator, type CreateBookmarkValidator } from '#val
 import db from '@adonisjs/lucid/services/db'
 import urlMetadata from 'url-metadata'
 import { type Data } from '../../.adonisjs/client/data.js'
-import logger from '@adonisjs/core/services/logger'
+import { type TransactionClientContract } from '@adonisjs/lucid/types/database'
 
 export type BookmarkListFilters = {
   archived?: boolean
@@ -180,7 +180,7 @@ export class BookmarkService {
   private static async resolveTagIds(
     userId: number,
     inputs: (CreateBookmarkValidator | UpdateBookmarkValidator)['tags'],
-    trx: any
+    trx: TransactionClientContract
   ): Promise<Data.Tag['id'][]> {
     // Sanitize inputs to ensure they are all numbers
     const existingTagIds = inputs

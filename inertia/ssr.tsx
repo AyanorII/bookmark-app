@@ -7,6 +7,7 @@ import { createInertiaApp } from '@inertiajs/react'
 import { TuyauProvider } from '@adonisjs/inertia/react'
 import { resolvePageComponent } from '@adonisjs/inertia/helpers'
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function render(page: any) {
   return createInertiaApp({
     page,

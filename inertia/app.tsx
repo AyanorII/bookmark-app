@@ -10,7 +10,7 @@ import { TuyauProvider } from '@adonisjs/inertia/react'
 import { resolvePageComponent } from '@adonisjs/inertia/helpers'
 import { MantineProvider } from '@mantine/core'
 import { theme } from './theme'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { QueryClientProvider } from '@tanstack/react-query'
 
 const appName = import.meta.env.VITE_APP_NAME || 'AdonisJS'
 

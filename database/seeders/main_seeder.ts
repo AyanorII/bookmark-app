@@ -1,5 +1,6 @@
 import Bookmark from '#models/bookmark'
 import User from '#models/user'
+import logger from '@adonisjs/core/services/logger'
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
 
 export default class extends BaseSeeder {
@@ -9,15 +10,15 @@ export default class extends BaseSeeder {
   }
 
   async seedUsers() {
-    console.log('⏳ Deleting existing users...')
+    logger.info('⏳ Deleting existing users...')
     await User.query().delete()
-    console.log('✅ Successfully deleted existing users.')
+    logger.info('✅ Successfully deleted existing users.')
 
-    console.log(' ')
+    logger.info(' ')
 
     const USERS_COUNT = 10
 
-    console.log(`⏳ Seeding ${USERS_COUNT} users...`)
+    logger.info(`⏳ Seeding ${USERS_COUNT} users...`)
     User.createMany(
       Array.from({ length: USERS_COUNT }, (_, i) => ({
         email: `test+${i + 1}@test.com`,
@@ -26,17 +27,17 @@ export default class extends BaseSeeder {
         fullName: `User ${i + 1}`,
       }))
     )
-    console.log(`✅ Successfully seeded ${USERS_COUNT} users.`)
+    logger.info(`✅ Successfully seeded ${USERS_COUNT} users.`)
   }
 
   async seedBookmarks() {
-    console.log('⏳ Deleting existing bookmarks...')
+    logger.info('⏳ Deleting existing bookmarks...')
     await Bookmark.query().delete()
-    console.log('✅ Successfully deleted existing bookmarks.')
+    logger.info('✅ Successfully deleted existing bookmarks.')
 
-    console.log(' ')
+    logger.info(' ')
 
-    console.log('⏳ Seeding bookmarks for each user...')
+    logger.info('⏳ Seeding bookmarks for each user...')
     const users = await User.all()
 
     await Promise.all(
@@ -82,6 +83,6 @@ export default class extends BaseSeeder {
         ])
       })
     )
-    console.log('✅ Successfully seeded bookmarks for each user.')
+    logger.info('✅ Successfully seeded bookmarks for each user.')
   }
 }

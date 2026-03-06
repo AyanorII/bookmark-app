@@ -3,13 +3,10 @@ import {
   AnchorProps,
   Avatar,
   AvatarProps,
-  Button,
   Card,
   CardProps,
   Group,
   GroupProps,
-  Menu,
-  Modal,
   Stack,
   StackProps,
   Text,
@@ -18,17 +15,7 @@ import {
   TitleProps,
 } from '@mantine/core'
 import React from 'react'
-import { LuArchive, LuCopy, LuExternalLink, LuTrash } from 'react-icons/lu'
-import { FaRegEdit } from 'react-icons/fa'
-import { BsPinAngle, BsPinAngleFill, BsThreeDotsVertical } from 'react-icons/bs'
 import { cn } from '~/lib/utils'
-import { Data } from '@generated/data'
-import { useMutation } from '@tanstack/react-query'
-import { api } from '~/client'
-import { useClipboard, useDisclosure } from '@mantine/hooks'
-import { router } from '@inertiajs/react'
-import { BookmarkForm } from './BookmarkForm'
-import { toast } from 'sonner'
 
 export const BookmarkCard = (props: CardProps) => {
   return <Card withBorder radius="lg" py={0} px={16} {...props} />

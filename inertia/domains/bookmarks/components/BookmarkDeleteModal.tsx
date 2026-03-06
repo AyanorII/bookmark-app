@@ -1,5 +1,4 @@
 import { Button, Group, Modal, Text } from '@mantine/core'
-import { mutationOptions } from '@tanstack/react-query'
 import { useDeleteBookmarkMutation } from '../api/mutations/useDeleteBookmarkMutation'
 import { toast } from 'sonner'
 import { router } from '@inertiajs/react'

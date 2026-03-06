@@ -23,7 +23,21 @@ export class BookmarkTagSchema extends BaseModel {
 }
 
 export class BookmarkSchema extends BaseModel {
-  static $columns = ['id', 'userId', 'title', 'url', 'favicon', 'description', 'viewCount', 'isPinned', 'isArchived', 'archivedAt', 'lastViewedAt', 'createdAt', 'updatedAt'] as const
+  static $columns = [
+    'id',
+    'userId',
+    'title',
+    'url',
+    'favicon',
+    'description',
+    'viewCount',
+    'isPinned',
+    'isArchived',
+    'archivedAt',
+    'lastViewedAt',
+    'createdAt',
+    'updatedAt',
+  ] as const
   $columns = BookmarkSchema.$columns
   @column({ isPrimary: true })
   declare id: number
@@ -71,7 +85,15 @@ export class TagSchema extends BaseModel {
 }
 
 export class UserSchema extends BaseModel {
-  static $columns = ['id', 'fullName', 'email', 'password', 'createdAt', 'updatedAt', 'avatar'] as const
+  static $columns = [
+    'id',
+    'fullName',
+    'email',
+    'password',
+    'createdAt',
+    'updatedAt',
+    'avatar',
+  ] as const
   $columns = UserSchema.$columns
   @column({ isPrimary: true })
   declare id: number

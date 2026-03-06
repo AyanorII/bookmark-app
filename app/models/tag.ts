@@ -1,7 +1,7 @@
 import { TagSchema } from '#database/schema'
-import { hasMany, beforeSave, belongsTo, manyToMany } from '@adonisjs/lucid/orm'
+import { beforeSave, belongsTo, manyToMany } from '@adonisjs/lucid/orm'
 import Bookmark from './bookmark.ts'
-import type { BelongsTo, HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
+import type { BelongsTo, ManyToMany } from '@adonisjs/lucid/types/relations'
 import string from '@adonisjs/core/helpers/string'
 import User from './user.ts'
 
