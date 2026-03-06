@@ -1,4 +1,5 @@
 import User from '#models/user'
+import { OnboardingService } from '#services/onboarding_service'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ProvidersController {
@@ -49,6 +50,8 @@ export default class ProvidersController {
       user.avatar = githubUser.avatarUrl
       await user.save()
     }
+
+    await OnboardingService.bootstrapForUser(user)
 
     await auth.use('web').login(user)
 

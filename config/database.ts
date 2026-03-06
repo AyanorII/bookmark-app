@@ -2,6 +2,7 @@ import app from '@adonisjs/core/services/app'
 import { defineConfig } from '@adonisjs/lucid'
 
 const dbConfig = defineConfig({
+  prettyPrintDebugQueries: app.inDev,
   /**
    * Default connection used for all queries.
    */
@@ -20,6 +21,8 @@ const dbConfig = defineConfig({
          */
         filename: app.tmpPath('db.sqlite3'),
       },
+
+      debug: app.inDev,
 
       /**
        * Required by Knex for SQLite defaults.
