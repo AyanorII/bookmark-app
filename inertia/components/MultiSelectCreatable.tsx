@@ -5,12 +5,14 @@ type MultiSelectCreatableProps = {
   options: string[]
   onChange?: (value: string[]) => void
   initialValue?: string[]
+  empty?: string
 }
 
 export function MultiSelectCreatable({
   options,
   onChange,
   initialValue = [],
+  empty = 'No options available',
 }: MultiSelectCreatableProps) {
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
@@ -97,7 +99,9 @@ export function MultiSelectCreatable({
       <Combobox.Dropdown>
         <Combobox.Options>
           {optionsEl}
-
+          {optionsEl.length === 0 && search.trim().length === 0 && (
+            <Combobox.Empty>{empty}</Combobox.Empty>
+          )}
           {!exactOptionMatch && search.trim().length > 0 && (
             <Combobox.Option value="$create">+ Create {search}</Combobox.Option>
           )}

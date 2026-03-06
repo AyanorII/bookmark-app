@@ -8,7 +8,7 @@ export const controllers = {
   Bookmarks: () => import('#controllers/bookmarks_controller'),
   Home: () => import('#controllers/home_controller'),
   NewAccount: () => import('#controllers/new_account_controller'),
+  Providers: () => import('#controllers/providers_controller'),
   Session: () => import('#controllers/session_controller'),
   Tags: () => import('#controllers/tags_controller'),
-  Providers: () => import('#controllers/providers_controller'),
 }

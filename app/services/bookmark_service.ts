@@ -1,9 +1,10 @@
 import Bookmark from '#models/bookmark'
 import Tag from '#models/tag'
-import { type CreateBookmarkValidator } from '#validators/bookmark'
+import { type UpdateBookmarkValidator, type CreateBookmarkValidator } from '#validators/bookmark'
 import db from '@adonisjs/lucid/services/db'
 import urlMetadata from 'url-metadata'
 import { type Data } from '../../.adonisjs/client/data.js'
+import logger from '@adonisjs/core/services/logger'
 
 export type BookmarkListFilters = {
   archived?: boolean
@@ -65,6 +66,7 @@ export class BookmarkService {
       const bookmark = await Bookmark.create(
         {
           ...data,
+          title: data.title || metadata.title || data.url,
           description: data.description || metadata.description,
           favicon,
           userId,
@@ -75,15 +77,17 @@ export class BookmarkService {
       if (data.tags?.length) {
         const tagIds = await this.resolveTagIds(userId, data.tags, trx)
         await bookmark.related('tags').sync(tagIds, false, trx)
-        await bookmark.load('tags', (q) => q.useTransaction(trx))
+        await bookmark.load('tags')
       }
 
       return bookmark
     })
   }
 
-  static async updateBookmark(bookmark: Bookmark, data: Partial<CreateBookmarkValidator>) {
+  static async updateBookmark(bookmark: Bookmark, data: UpdateBookmarkValidator) {
     return db.transaction(async (trx) => {
+      bookmark.useTransaction(trx)
+
       if (data.url && data.url !== bookmark.url) {
         const metadata = await this.getURLMetadata(data.url)
 
@@ -94,15 +98,16 @@ export class BookmarkService {
         bookmark.favicon = favicon
       }
 
-      bookmark.merge(data)
+      const { tags, ...rest } = data
 
-      if (data.tags) {
-        const tagIds = await this.resolveTagIds(bookmark.userId!, data.tags, trx)
-        await bookmark.related('tags').sync(tagIds, false, trx)
+      bookmark.merge(rest)
+
+      if (tags) {
+        const tagIds = await this.resolveTagIds(bookmark.userId!, tags, trx)
+        await bookmark.related('tags').sync(tagIds, true, trx)
       }
 
-      await bookmark.save()
-      await bookmark.load('tags', (q) => q.useTransaction(trx))
+      await bookmark.load('tags')
 
       return bookmark
     })
@@ -174,7 +179,7 @@ export class BookmarkService {
    */
   private static async resolveTagIds(
     userId: number,
-    inputs: CreateBookmarkValidator['tags'],
+    inputs: (CreateBookmarkValidator | UpdateBookmarkValidator)['tags'],
     trx: any
   ): Promise<Data.Tag['id'][]> {
     // Sanitize inputs to ensure they are all numbers

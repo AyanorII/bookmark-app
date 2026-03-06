@@ -1,4 +1,4 @@
-import { Button, Group, Stack, Textarea, TextInput } from '@mantine/core'
+import { Button, Group, Input, Stack, Textarea, TextInput } from '@mantine/core'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '~/client'
 import { MultiSelectCreatable } from '~/components/MultiSelectCreatable'
@@ -11,6 +11,10 @@ import {
   CreateBookmarkField,
   useCreateBookmarkMutation,
 } from '../api/mutations/useCreateBookmarkMutation'
+import {
+  UpdateBookmarkField,
+  useUpdateBookmarkMutation,
+} from '../api/mutations/useUpdateBookmarkMutation'
 
 type BookmarkFormProps = {
   bookmark?: Data.Bookmark
@@ -21,22 +25,32 @@ type BookmarkFormProps = {
 export const BookmarkForm = ({ bookmark, onSuccess, onCancel }: BookmarkFormProps) => {
   const { data, isLoading: isLoadingTags } = useQuery(api.tags.index.queryOptions())
 
-  const {
-    mutate: createBookmark,
-    error,
-    isPending,
-  } = useCreateBookmarkMutation({
+  const mutationOptions = {
     onSuccess: () => {
       router.reload({ only: ['bookmarks', 'tags'] })
       onSuccess?.()
     },
-  })
+  }
+
+  const {
+    mutate: updateBookmark,
+    error: updateError,
+    isPending: isUpdating,
+  } = useUpdateBookmarkMutation(mutationOptions)
+
+  const {
+    mutate: createBookmark,
+    error: createError,
+    isPending: isCreating,
+  } = useCreateBookmarkMutation(mutationOptions)
 
   useEffect(() => {
+    const error = bookmark ? updateError : createError
+
     if (error?.response?.errors.length) {
       const errors = error.response.errors.reduce(
         (acc, curr) => {
-          acc[curr.field] = curr.message
+          acc[curr.field as CreateBookmarkField] = curr.message
           return acc
         },
         {} as Record<CreateBookmarkField, string>
@@ -44,7 +58,7 @@ export const BookmarkForm = ({ bookmark, onSuccess, onCancel }: BookmarkFormProp
 
       form.setErrors(errors)
     }
-  }, [error])
+  }, [updateError, createError])
 
   const form = useForm<CreateBookmarkValidator>({
     initialValues: {
@@ -60,22 +74,35 @@ export const BookmarkForm = ({ bookmark, onSuccess, onCancel }: BookmarkFormProp
   const availableTags = tags.map((tag) => tag.name) ?? []
 
   const handleSubmit = form.onSubmit((values) => {
-    console.log('Submitting form with values:', values)
-    createBookmark({ body: values })
+    if (bookmark) {
+      updateBookmark({ params: { id: bookmark.id }, body: values })
+    } else {
+      createBookmark({ body: values })
+    }
   })
+
+  const isPending = isCreating || isUpdating
 
   return (
     <form onSubmit={handleSubmit}>
       <Stack>
-        <TextInput {...form.getInputProps('title')} label="Title" required />
-        <Textarea {...form.getInputProps('description')} label="Description" />
+        <TextInput {...form.getInputProps('title')} label="Title" required={!!bookmark} />
+        <Textarea
+          {...form.getInputProps('description')}
+          label="Description"
+          autosize
+          maxRows={8}
+          minRows={3}
+        />
         <TextInput {...form.getInputProps('url')} label="URL" type="url" required />
         {!isLoadingTags && (
-          <MultiSelectCreatable
-            onChange={(value) => form.setFieldValue('tags', value)}
-            options={availableTags}
-            initialValue={form.values.tags as string[]}
-          />
+          <Input.Wrapper label="Tags">
+            <MultiSelectCreatable
+              onChange={(value) => form.setFieldValue('tags', value)}
+              options={availableTags}
+              initialValue={form.values.tags as string[]}
+            />
+          </Input.Wrapper>
         )}
         <Group justify="flex-end">
           <Button onClick={onCancel} variant="outline" type="button" disabled={isPending}>

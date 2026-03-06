@@ -20,9 +20,9 @@ export const Header = ({ isOpened, onToggle }: Props) => {
     useDisclosure()
 
   return (
-    <Group h="100%" px="md">
+    <Group h="100%" px="md" gap={8}>
       <Burger opened={isOpened} onClick={onToggle} hiddenFrom="sm" size="sm" />
-      <Logo />
+      <Logo className="hidden md:block" />
       <TextInput
         defaultValue={filters.search ?? undefined}
         name="search"
@@ -44,8 +44,15 @@ export const Header = ({ isOpened, onToggle }: Props) => {
           }
         }}
       />
-      <Button onClick={openBookmarkModal} leftSection={<FaPlus />} ml="auto">
-        Add Bookmark
+      <Button
+        onClick={openBookmarkModal}
+        leftSection={<FaPlus />}
+        ml="auto"
+        pr={{ base: 3, sm: 'md' }}
+      >
+        <Text fw={500} fz="sm" display={{ base: 'none', sm: 'block' }}>
+          Add Bookmark
+        </Text>
       </Button>
       <UserMenu />
       <Modal.Root opened={isBookmarkModalOpen} onClose={closeBookmarkModal} centered>
@@ -59,8 +66,8 @@ export const Header = ({ isOpened, onToggle }: Props) => {
           </Modal.Header>
           <Modal.Body>
             <Text size="sm" c="dimmed" mb="md">
-              Save a link with details to keep your collection organized. We extract the favicon
-              automatically from the URL.
+              Save a link with details to keep your collection organized. You can leave the title
+              and description empty — we will try to fetch them for you.
             </Text>
             <BookmarkForm
               onSuccess={() => {

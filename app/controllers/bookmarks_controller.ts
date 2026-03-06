@@ -44,9 +44,9 @@ export default class BookmarksController {
     await bouncer.with(BookmarkPolicy).authorize('edit', bookmark)
 
     const payload = await request.validateUsing(updateBookmarkValidator)
-    await bookmark.merge(payload).save()
+    const updatedBookmark = await BookmarkService.updateBookmark(bookmark, payload)
 
-    return serialize(BookmarkTransformer.transform(bookmark))
+    return serialize(BookmarkTransformer.transform(updatedBookmark))
   }
 
   async destroy({ params, auth, bouncer, response }: HttpContext) {

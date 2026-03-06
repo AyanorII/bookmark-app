@@ -1,4 +1,4 @@
-import { Badge, Grid, Spoiler, Stack, Text, Tooltip } from '@mantine/core'
+import { Badge, Grid, Spoiler, Stack, Text, Title, Tooltip } from '@mantine/core'
 import {
   BookmarkCard,
   BookmarkCardBody,
@@ -6,7 +6,6 @@ import {
   BookmarkCardHeader,
   BookmarkDescription,
   BookmarkFavicon,
-  BookmarkMenu,
   BookmarkStat,
   BookmarkTags,
   BookmarkTitle,
@@ -20,6 +19,7 @@ import { Data } from '@generated/data'
 import { api } from '~/client'
 import { useMutation } from '@tanstack/react-query'
 import { router } from '@inertiajs/react'
+import { BookmarkMenu } from './BookmarkMenu'
 
 type BookmarksGridProps = {
   bookmarks: Data.Bookmark[]
@@ -49,12 +49,22 @@ export const BookmarksGrid = ({ bookmarks }: BookmarksGridProps) => {
 
   return (
     <Grid>
+      {bookmarks.length === 0 && (
+        <Grid.Col span={12}>
+          <Stack align="center" mt={40} gap={8}>
+            <Title size="lg">No bookmarks found</Title>
+            <Text c="dimmed" size="sm">
+              Start adding your favorite links to see them here.
+            </Text>
+          </Stack>
+        </Grid.Col>
+      )}
       {bookmarks.map((bookmark) => (
         <Grid.Col key={bookmark.id} span={{ base: 12, md: 6, lg: 4, xl: 3 }}>
           <BookmarkCard h="100%">
             <BookmarkCardHeader>
               <BookmarkFavicon src={bookmark.favicon} />
-              <Stack gap={0} flex="1 1 auto">
+              <Stack gap={0} flex="1 1 auto" className="overflow-hidden">
                 <BookmarkTitle>{bookmark.title}</BookmarkTitle>
                 <BookmarkURL
                   onClick={() => incrementViewCount.mutate({ params: { id: bookmark.id } })}
@@ -70,11 +80,11 @@ export const BookmarksGrid = ({ bookmarks }: BookmarksGridProps) => {
             </BookmarkCardHeader>
             <BookmarkCardBody flex="1 1 auto">
               <Spoiler
-                maxHeight={70}
+                maxHeight={60}
                 showLabel={<Text size="xs">Show more</Text>}
                 hideLabel={<Text size="xs">Show less</Text>}
               >
-                <BookmarkDescription>{bookmark.description}</BookmarkDescription>
+                <BookmarkDescription lineClamp={3}>{bookmark.description}</BookmarkDescription>
               </Spoiler>
               {bookmark.tags.length > 0 && (
                 <BookmarkTags>

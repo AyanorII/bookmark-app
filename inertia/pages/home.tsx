@@ -46,6 +46,27 @@ export default function Home({ bookmarks, tags }: HomeProps) {
   const [opened, { toggle }] = useDisclosure()
   const { filters } = useBookmarkQueryFilters()
 
+  const getTitle = () => {
+    if (filters.search) {
+      return `Results for: "${filters.search}"`
+    }
+
+    if (filters.tags?.length) {
+      const tagNames = tags
+        .filter((tag) => filters.tags?.includes(tag.id))
+        .map((tag) => tag.name)
+        .join(', ')
+
+      return `Bookmarks tagged with: ${tagNames}`
+    }
+
+    if (filters.archived) {
+      return 'Archived Bookmarks'
+    }
+
+    return 'All Bookmarks'
+  }
+
   return (
     <AppShell
       padding="md"
@@ -65,7 +86,7 @@ export default function Home({ bookmarks, tags }: HomeProps) {
       <AppShell.Main>
         <Group justify="space-between" align="center" mb={16}>
           <Title order={1} size="xl">
-            {filters.archived ? 'Archived Bookmarks' : 'All Bookmarks'}
+            {getTitle()}
           </Title>
           <BookmarkSortMenu />
         </Group>

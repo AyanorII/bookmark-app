@@ -16,7 +16,13 @@ export const BookmarkSortMenu = () => {
   return (
     <Menu radius="md">
       <Menu.Target>
-        <Button leftSection={<BiSortAlt2 />} variant="white" radius="md" size="sm">
+        <Button
+          leftSection={<BiSortAlt2 />}
+          variant="white"
+          radius="md"
+          size="sm"
+          bd="1px solid #dee2e6"
+        >
           Sort by
         </Button>
       </Menu.Target>
