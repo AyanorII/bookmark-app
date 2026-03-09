@@ -51,7 +51,12 @@ export default class ProvidersController {
       await user.save()
     }
 
-    await OnboardingService.bootstrapForUser(user)
+    await user.load('bookmarks')
+    const hasBookmarks = user.bookmarks.length > 0
+
+    if (!hasBookmarks) {
+      await OnboardingService.bootstrapForUser(user)
+    }
 
     await auth.use('web').login(user)
 
