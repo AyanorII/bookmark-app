@@ -58,6 +58,9 @@ jobs:
             tar -xzf deploy.tar.gz
             rm deploy.tar.gz
 
+            # Symlink .env file so it doesn't get overwritten
+            ln -sf ../.env build/.env
+
             nvm install
             nvm use
 
