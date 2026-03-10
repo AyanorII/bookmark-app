@@ -36,7 +36,7 @@ export const NavLinks = ({ tags }: NavLinksProps) => {
         TAGS
       </Text>
       <Checkbox.Group
-        defaultValue={filters.tags?.map(String) ?? []}
+        value={filters.tags?.map(String) ?? []}
         onChange={(values) => {
           router.get(
             '',

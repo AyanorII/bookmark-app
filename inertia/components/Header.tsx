@@ -29,6 +29,7 @@ export const Header = ({ isOpened, onToggle }: Props) => {
         placeholder="Search by title"
         leftSection={<RiSearchLine />}
         maw={320}
+        ml={{ base: 16, md: 60 }}
         onKeyDown={(e) => {
           if (e.key === 'Enter') {
             const value = e.currentTarget.value

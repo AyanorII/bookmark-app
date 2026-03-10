@@ -18,14 +18,15 @@ import { FaRegClock } from 'react-icons/fa6'
 import { CiCalendar } from 'react-icons/ci'
 import { useIncrementBookmarkViewCountMutation } from '../api/mutations/useIncrementBookmarkViewCountMutation copy'
 import { router } from '@inertiajs/react'
-import { useDisclosure } from '@mantine/hooks'
+import { useBookmarkQueryFilters } from '../hooks/useBookmarkQueryFilters'
+import { useCallback, useMemo } from 'react'
 
 type BookmarkItemProps = {
   bookmark: Data.Bookmark
 }
 
 export const BookmarkItem = ({ bookmark }: BookmarkItemProps) => {
-  const [isDescriptionExpanded, { toggle: toggleDescriptionExpanded }] = useDisclosure()
+  const { filters } = useBookmarkQueryFilters()
 
   const { mutate: incrementViewCount } = useIncrementBookmarkViewCountMutation({
     onSuccess: () => {
@@ -33,7 +34,7 @@ export const BookmarkItem = ({ bookmark }: BookmarkItemProps) => {
     },
   })
 
-  const getFormattedDate = (d: string) => {
+  const getFormattedDate = useCallback((d: string) => {
     const date = new Date(d)
 
     const isSameYear = date.getFullYear() === new Date().getFullYear()
@@ -45,28 +46,47 @@ export const BookmarkItem = ({ bookmark }: BookmarkItemProps) => {
     })
 
     return formatter.format(date)
-  }
+  }, [])
 
-  const stats = [
-    {
-      id: 'views',
-      icon: <LuEye className="size-3" />,
-      value: bookmark.viewCount,
-      label: 'Total views',
+  const stats = useMemo(
+    () => [
+      {
+        id: 'views',
+        icon: <LuEye className="size-3" />,
+        value: bookmark.viewCount,
+        label: 'Total views',
+      },
+      {
+        id: 'lastViewedAt',
+        icon: <FaRegClock className="size-3" />,
+        value: bookmark.lastViewedAt ? getFormattedDate(bookmark.lastViewedAt) : 'Never',
+        label: 'Last visited',
+      },
+      {
+        id: 'createdAt',
+        icon: <CiCalendar className="size-3" />,
+        value: getFormattedDate(bookmark.createdAt!),
+        label: 'Created at',
+      },
+    ],
+    [bookmark, getFormattedDate]
+  )
+
+  const handleTagClick = useCallback(
+    (tagId: Data.Tag['id']) => {
+      router.get(
+        '',
+        {
+          ...filters,
+          tags: filters.tags?.includes(tagId)
+            ? filters.tags.filter((t) => t !== tagId)
+            : [...(filters.tags ?? []), tagId],
+        },
+        { preserveState: true, replace: true }
+      )
     },
-    {
-      id: 'lastViewedAt',
-      icon: <FaRegClock className="size-3" />,
-      value: bookmark.lastViewedAt ? getFormattedDate(bookmark.lastViewedAt) : 'Never',
-      label: 'Last visited',
-    },
-    {
-      id: 'createdAt',
-      icon: <CiCalendar className="size-3" />,
-      value: getFormattedDate(bookmark.createdAt!),
-      label: 'Created at',
-    },
-  ]
+    [filters]
+  )
 
   return (
     <BookmarkCard h="100%">
@@ -88,20 +108,22 @@ export const BookmarkItem = ({ bookmark }: BookmarkItemProps) => {
       </BookmarkCardHeader>
       <BookmarkCardBody flex="1 1 auto">
         <Spoiler
-          expanded={isDescriptionExpanded}
-          onExpandedChange={toggleDescriptionExpanded}
-          maxHeight={60}
           showLabel={<Text size="xs">Show more</Text>}
           hideLabel={<Text size="xs">Show less</Text>}
         >
-          <BookmarkDescription lineClamp={isDescriptionExpanded ? undefined : 3}>
-            {bookmark.description}
-          </BookmarkDescription>
+          <BookmarkDescription>{bookmark.description}</BookmarkDescription>
         </Spoiler>
         {bookmark.tags.length > 0 && (
-          <BookmarkTags>
+          <BookmarkTags mt="auto">
             {bookmark.tags.map((tag) => (
-              <Badge key={tag.id} size="xs" radius="sm" variant="light">
+              <Badge
+                key={tag.id}
+                onClick={() => handleTagClick(tag.id)}
+                size="xs"
+                radius="sm"
+                variant="light"
+                className="hover:shadow cursor-pointer"
+              >
                 {tag.name}
               </Badge>
             ))}

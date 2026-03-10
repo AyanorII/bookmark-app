@@ -8,7 +8,7 @@ const SORT_OPTIONS = [
   { value: 'added', label: 'Recently added' },
   { value: 'visited', label: 'Recently visited' },
   { value: 'views', label: 'Most visited' },
-]
+] as const
 
 export const BookmarkSortMenu = () => {
   const { filters } = useBookmarkQueryFilters()
@@ -22,6 +22,7 @@ export const BookmarkSortMenu = () => {
           radius="md"
           size="sm"
           bd="1px solid #dee2e6"
+          className="shrink-0"
         >
           Sort by
         </Button>

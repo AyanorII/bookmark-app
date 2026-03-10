@@ -23,12 +23,10 @@ export default function Home({ bookmarks, tags }: HomeProps) {
     }
 
     if (filters.tags?.length) {
-      const tagNames = tags
-        .filter((tag) => filters.tags?.includes(tag.id))
-        .map((tag) => tag.name)
-        .join(', ')
+      const tagNames = tags.filter((tag) => filters.tags?.includes(tag.id)).map((tag) => tag.name)
+      const formatter = new Intl.ListFormat('en', { style: 'long', type: 'disjunction' })
 
-      return `Bookmarks tagged with: ${tagNames}`
+      return `Bookmarks tagged with: ${formatter.format(tagNames)}`
     }
 
     if (filters.archived) {
@@ -55,7 +53,7 @@ export default function Home({ bookmarks, tags }: HomeProps) {
         <NavLinks tags={tags} />
       </AppShell.Navbar>
       <AppShell.Main>
-        <Group justify="space-between" align="center" mb={16}>
+        <Group justify="space-between" align="center" mb={16} wrap="nowrap">
           <Title order={1} size="xl">
             {getTitle()}
           </Title>
