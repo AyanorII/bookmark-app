@@ -1,0 +1,71 @@
+name: Deployment
+
+concurrency: production
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+      - name: Prepare deploy bundle
+        run: tar -czf deploy.tar.gz build package.json package-lock.json .nvmrc
+
+      - name: Upload deploy bundle
+        uses: burnett01/rsync-deployments@7.0.1
+        with:
+          switches: -avz --progress -e "ssh -o StrictHostKeyChecking=no"
+          path: deploy.tar.gz
+          remote_path: /var/www/bookmark-app/
+          remote_host: ${{ secrets.PROD_HOST }}
+          remote_user: ${{ secrets.PROD_USERNAME }}
+          remote_key: ${{ secrets.PROD_SSH_KEY }}
+
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.PROD_HOST }}
+          username: ${{ secrets.PROD_USERNAME }}
+          key: ${{ secrets.PROD_SSH_KEY }}
+          script: |
+            cd /var/www/bookmark-app
+
+            # Load Node
+            export NVM_DIR="$HOME/.nvm"
+            . "$NVM_DIR/nvm.sh"
+
+            # Remove old build
+            rm -rf build
+
+            # Extract build
+            tar -xzf deploy.tar.gz
+            rm deploy.tar.gz
+
+            nvm install
+            nvm use
+
+            # Install prod deps
+            npm ci --omit=dev
+
+            cd build
+            node ace migration:run
+
+            # Restart service
+            sudo systemctl restart bookmark-app
