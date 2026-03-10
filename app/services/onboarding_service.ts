@@ -168,8 +168,7 @@ export class OnboardingService {
     return db.transaction(async (trx) => {
       /* -------------------- TAGS -------------------- */
       logger.info(`Ensuring ${uniqueTags.length} unique tags exist for user`)
-      const tags = await Tag.fetchOrCreateMany(
-        'name',
+      const tags = await Tag.createMany(
         uniqueTags.map((name) => ({
           name,
           userId: user.id,
@@ -183,14 +182,7 @@ export class OnboardingService {
       logger.info(`Created ${tags.length} tags`)
 
       /* -------------------- BOOKMARKS -------------------- */
-
-      // const createdBookmarks = await user.related('bookmarks').fetchOrCreateMany(
-      //   this.BOOKMARKS.map(({ tags: t, ...bookmark }) => bookmark),
-      //   'url',
-      //   { client: trx }
-      // )
-      const createdBookmarks = await Bookmark.fetchOrCreateMany(
-        'url',
+      const createdBookmarks = await Bookmark.createMany(
         this.BOOKMARKS.map(({ tags: t, ...bookmark }) => ({
           ...bookmark,
           userId: user.id,
