@@ -68,7 +68,7 @@ jobs:
             npm ci --omit=dev
 
             cd build
-            node ace migration:run
+            node ace migration:run --force
 
             # Restart service
             sudo systemctl restart bookmark-app
