@@ -37,9 +37,13 @@ export class BookmarkService {
         q.whereHas('tags', (tagQ) => tagQ.whereIn('tags.id', filters.tags!))
       )
       .if(filters.search, (q) => q.where('title', 'like', `%${filters.search}%`))
-      .if(filters.sort && Object.values(BOOKMARKS_SORT_OPTIONS).includes(filters.sort), (q) =>
-        q.orderBy(filters.sort as BookmarksSortOption, 'desc')
-      )
+      .if(filters.sort && Object.values(BOOKMARKS_SORT_OPTIONS).includes(filters.sort), (q) => {
+        if (filters.sort === BOOKMARKS_SORT_OPTIONS.LAST_VIEWED_AT) {
+          q.orderByRaw('last_viewed_at DESC NULLS LAST')
+        } else {
+          q.orderBy(filters.sort as BookmarksSortOption, 'desc')
+        }
+      })
       .preload('tags')
 
     return query.paginate(
