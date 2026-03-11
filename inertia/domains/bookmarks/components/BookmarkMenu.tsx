@@ -99,7 +99,16 @@ export const BookmarkMenu = ({ bookmark }: BookmarkMenuProps) => {
         </Menu.Target>
         <Menu.Dropdown>
           {ACTIONS.map((action) => (
-            <Menu.Item key={action.id} onClick={action.onClick} leftSection={action.icon} px={8}>
+            <Menu.Item
+              key={action.id}
+              onClick={action.onClick}
+              target="_blank"
+              rel="noopener noreferrer"
+              leftSection={action.icon}
+              px={8}
+              component="a"
+              href={bookmark.url}
+            >
               {action.label}
             </Menu.Item>
           ))}

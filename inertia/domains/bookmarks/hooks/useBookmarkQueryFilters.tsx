@@ -1,4 +1,4 @@
-import type { BookmarkListFilters } from '#services/bookmark_service'
+import { BookmarkListFilters } from '@/shared/constants/bookmarks'
 import { usePage } from '@inertiajs/react'
 
 export const useBookmarkQueryFilters = () => {

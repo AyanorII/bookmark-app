@@ -1,7 +1,8 @@
+import { BookmarkListFilters } from '@/shared/constants/bookmarks'
 import { Link, LinkProps } from '@adonisjs/inertia/react'
 import { Data } from '@generated/data'
 import { router } from '@inertiajs/react'
-import { Avatar, Checkbox, Group, Stack, Text } from '@mantine/core'
+import { Avatar, Button, Checkbox, Group, Stack, Text } from '@mantine/core'
 import { LuArchive } from 'react-icons/lu'
 import { RiHome6Line } from 'react-icons/ri'
 import { urlFor } from '~/client'
@@ -14,41 +15,77 @@ type NavLinksProps = {
 export const NavLinks = ({ tags }: NavLinksProps) => {
   const { filters } = useBookmarkQueryFilters()
 
+  const hasTagFilters =
+    !!filters.tags?.length && filters.tags.map(Number).filter(Boolean).length > 0
+
   return (
     <>
       <Stack gap={4} mb={16}>
         <CustomLink
-          href={urlFor('home', {}, { qs: { ...filters, archived: undefined } })}
+          href={urlFor(
+            'home',
+            {},
+            {
+              qs: {
+                ...filters,
+                tags: filters?.tags?.map(Number).filter(Boolean),
+                archived: undefined,
+              } as BookmarkListFilters,
+            }
+          )}
           isActive={!filters.archived}
         >
           <RiHome6Line className="size-5" />
           Home
         </CustomLink>
         <CustomLink
-          href={urlFor('home', {}, { qs: { ...filters, archived: true } })}
+          href={urlFor(
+            'home',
+            {},
+            {
+              qs: {
+                ...filters,
+                tags: filters?.tags?.map(Number).filter(Boolean),
+                archived: true,
+              } as BookmarkListFilters,
+            }
+          )}
           isActive={filters.archived}
         >
           <LuArchive className="size-5" />
           Archived
         </CustomLink>
       </Stack>
-      <Text mt={8} size="xs" className="font-bold">
-        TAGS
-      </Text>
+      <Group mt={8} align="center" justify="space-between">
+        <Text size="xs" className="font-bold">
+          TAGS
+        </Text>
+        {hasTagFilters && (
+          <Button
+            onClick={() => {
+              router.get('', { tags: [] } as BookmarkListFilters, {
+                preserveState: true,
+                replace: true,
+              })
+            }}
+            variant="subtle"
+            size="compact-xs"
+          >
+            Reset
+          </Button>
+        )}
+      </Group>
       <Checkbox.Group
         value={filters.tags?.map(String) ?? []}
         onChange={(values) => {
-          router.get(
-            '',
-            { tags: values },
-            {
-              preserveState: true,
-              replace: true,
-            }
-          )
+          router.get('', { tags: values.map(Number).filter(Boolean) } as BookmarkListFilters, {
+            preserveState: true,
+            replace: true,
+          })
         }}
+        className="overflow-auto pr-3 mt-4"
       >
-        <Stack gap={8} mt={16}>
+        <Stack gap={8}>
           {tags.map((tag) => (
             <Checkbox
               key={tag.id}

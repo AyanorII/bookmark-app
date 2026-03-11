@@ -12,11 +12,14 @@ import db from '@adonisjs/lucid/services/db'
 import { BookmarkService } from '#services/bookmark_service'
 
 export default class BookmarksController {
-  async index({ serialize, auth }: HttpContext) {
+  async index({ serialize, auth, request }: HttpContext) {
     const user = auth.user!
-    const bookmarks = await BookmarkService.listForUser(user.id)
+    const qs = request.qs()
+    const filters = BookmarkService.getQueryFilters(qs)
 
-    return serialize(BookmarkTransformer.transform(bookmarks))
+    const bookmarks = await BookmarkService.listForUser(user.id, filters)
+
+    return serialize(BookmarkTransformer.transform(bookmarks.all()))
   }
 
   async show({ params, serialize, auth }: HttpContext) {

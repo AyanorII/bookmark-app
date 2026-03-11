@@ -1,12 +1,16 @@
-import { Grid, Stack, Text, Title } from '@mantine/core'
+import { Grid, Pagination, Stack, Text, Title } from '@mantine/core'
 
 import { Data } from '@generated/data'
 import { BookmarkItem } from './BookmarkItem'
+import type { PaginationMeta } from '../../../../app/helpers/paginator'
+import { router } from '@inertiajs/react'
+import { BookmarkListFilters } from '@/shared/constants/bookmarks'
 
 type BookmarksGridProps = {
   bookmarks: Data.Bookmark[]
+  meta: PaginationMeta
 }
-export const BookmarksGrid = ({ bookmarks }: BookmarksGridProps) => {
+export const BookmarksGrid = ({ bookmarks, meta }: BookmarksGridProps) => {
   return (
     <Grid>
       {bookmarks.length === 0 && (
@@ -24,6 +28,21 @@ export const BookmarksGrid = ({ bookmarks }: BookmarksGridProps) => {
           <BookmarkItem bookmark={bookmark} />
         </Grid.Col>
       ))}
+      {bookmarks.length > 0 && (
+        <Grid.Col span={12} mt={32} mb={60}>
+          <Pagination
+            total={meta.lastPage}
+            value={meta.currentPage}
+            onChange={(page) => {
+              router.get('', { page } as BookmarkListFilters, {
+                preserveState: true,
+                replace: true,
+              })
+            }}
+            className="w-fit mx-auto"
+          />
+        </Grid.Col>
+      )}
     </Grid>
   )
 }

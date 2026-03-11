@@ -7,13 +7,15 @@ import { BookmarksGrid } from '~/domains/bookmarks/components/BookmarksGrid'
 import { useBookmarkQueryFilters } from '~/domains/bookmarks/hooks/useBookmarkQueryFilters'
 import { Header } from '~/components/Header'
 import { BookmarkSortMenu } from '~/domains/bookmarks/components/BookmarkSortMenu'
+import type { PaginationMeta } from '../../app/helpers/paginator'
 
 type HomeProps = InertiaProps<{
   bookmarks: Data.Bookmark[]
   tags: Data.Tag.Variants['withBookmarksCount'][]
+  meta: PaginationMeta
 }>
 
-export default function Home({ bookmarks, tags }: HomeProps) {
+export default function Home({ bookmarks, tags, meta }: HomeProps) {
   const [opened, { toggle }] = useDisclosure()
   const { filters } = useBookmarkQueryFilters()
 
@@ -59,7 +61,7 @@ export default function Home({ bookmarks, tags }: HomeProps) {
           </Title>
           <BookmarkSortMenu />
         </Group>
-        <BookmarksGrid bookmarks={bookmarks} />
+        <BookmarksGrid bookmarks={bookmarks} meta={meta} />
       </AppShell.Main>
     </AppShell>
   )

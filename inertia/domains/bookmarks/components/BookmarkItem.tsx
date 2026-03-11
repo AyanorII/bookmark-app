@@ -20,6 +20,8 @@ import { useIncrementBookmarkViewCountMutation } from '../api/mutations/useIncre
 import { router } from '@inertiajs/react'
 import { useBookmarkQueryFilters } from '../hooks/useBookmarkQueryFilters'
 import { useCallback, useMemo } from 'react'
+import { BookmarkListFilters } from '@/shared/constants/bookmarks'
+import { MdOutlinePushPin } from 'react-icons/md'
 
 type BookmarkItemProps = {
   bookmark: Data.Bookmark
@@ -27,7 +29,6 @@ type BookmarkItemProps = {
 
 export const BookmarkItem = ({ bookmark }: BookmarkItemProps) => {
   const { filters } = useBookmarkQueryFilters()
-
   const { mutate: incrementViewCount } = useIncrementBookmarkViewCountMutation({
     onSuccess: () => {
       router.reload({ only: ['bookmarks'] })
@@ -79,9 +80,9 @@ export const BookmarkItem = ({ bookmark }: BookmarkItemProps) => {
         {
           ...filters,
           tags: filters.tags?.includes(tagId)
-            ? filters.tags.filter((t) => t !== tagId)
-            : [...(filters.tags ?? []), tagId],
-        },
+            ? filters.tags.map(Number).filter((t) => t !== tagId)
+            : [...(filters.tags?.map(Number).filter(Boolean) ?? []), tagId],
+        } as BookmarkListFilters,
         { preserveState: true, replace: true }
       )
     },
@@ -136,6 +137,11 @@ export const BookmarkItem = ({ bookmark }: BookmarkItemProps) => {
             <BookmarkStat icon={stat.icon} value={stat.value} />
           </Tooltip>
         ))}
+        {bookmark.isPinned && (
+          <Tooltip label="Pinned" withArrow>
+            <MdOutlinePushPin className="ml-auto" />
+          </Tooltip>
+        )}
       </BookmarkCardFooter>
     </BookmarkCard>
   )

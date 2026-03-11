@@ -3,11 +3,13 @@ import { Button, Group, Menu } from '@mantine/core'
 import { useBookmarkQueryFilters } from '../hooks/useBookmarkQueryFilters'
 import { BiSortAlt2 } from 'react-icons/bi'
 import { FaCheck } from 'react-icons/fa6'
+import { BookmarkListFilters, BOOKMARKS_SORT_OPTIONS } from '@/shared/constants/bookmarks'
+import { DEFAULT_FILTERS } from '@/shared/constants/filters'
 
 const SORT_OPTIONS = [
-  { value: 'added', label: 'Recently added' },
-  { value: 'visited', label: 'Recently visited' },
-  { value: 'views', label: 'Most visited' },
+  { value: BOOKMARKS_SORT_OPTIONS.CREATED_AT, label: 'Recently added' },
+  { value: BOOKMARKS_SORT_OPTIONS.LAST_VIEWED_AT, label: 'Recently visited' },
+  { value: BOOKMARKS_SORT_OPTIONS.VIEW_COUNT, label: 'Most visited' },
 ] as const
 
 export const BookmarkSortMenu = () => {
@@ -29,8 +31,7 @@ export const BookmarkSortMenu = () => {
       </Menu.Target>
       <Menu.Dropdown miw={200}>
         {SORT_OPTIONS.map((option) => {
-          const defaultSort = 'added'
-          const isSelected = (filters.sort ?? defaultSort) === option.value
+          const isSelected = (filters.sort ?? DEFAULT_FILTERS.SORT) === option.value
 
           return (
             <Menu.Item
@@ -38,7 +39,12 @@ export const BookmarkSortMenu = () => {
               onClick={() => {
                 router.get(
                   '',
-                  { ...filters, sort: option.value === defaultSort ? undefined : option.value },
+                  {
+                    ...filters,
+                    tags: filters?.tags?.map(Number).filter(Boolean),
+                    page: undefined,
+                    sort: option.value === DEFAULT_FILTERS.SORT ? undefined : option.value,
+                  } as BookmarkListFilters,
                   { preserveState: true, replace: true }
                 )
               }}

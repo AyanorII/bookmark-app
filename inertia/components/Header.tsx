@@ -8,6 +8,8 @@ import { useDisclosure } from '@mantine/hooks'
 import { BookmarkForm } from '~/domains/bookmarks/components/BookmarkForm'
 import { toast } from 'sonner'
 import { UserMenu } from './UserMenu'
+import { Link } from '@adonisjs/inertia/react'
+import { BookmarkListFilters } from '@/shared/constants/bookmarks'
 
 type Props = {
   isOpened: boolean
@@ -22,7 +24,9 @@ export const Header = ({ isOpened, onToggle }: Props) => {
   return (
     <Group h="100%" px="md" gap={8}>
       <Burger opened={isOpened} onClick={onToggle} hiddenFrom="sm" size="sm" />
-      <Logo className="hidden md:block" />
+      <Link route="home">
+        <Logo className="hidden md:block" />
+      </Link>
       <TextInput
         defaultValue={filters.search ?? undefined}
         name="search"
@@ -36,7 +40,12 @@ export const Header = ({ isOpened, onToggle }: Props) => {
 
             router.get(
               '',
-              { ...filters, search: value || undefined },
+              {
+                ...filters,
+                page: undefined,
+                tags: filters.tags?.map(Number).filter(Boolean),
+                search: value || undefined,
+              } as BookmarkListFilters,
               {
                 preserveState: true,
                 replace: true,

@@ -1,3 +1,4 @@
+import type { HttpContext } from '@adonisjs/core/http'
 import Bookmark from '#models/bookmark'
 import Tag from '#models/tag'
 import { type UpdateBookmarkValidator, type CreateBookmarkValidator } from '#validators/bookmark'
@@ -6,54 +7,45 @@ import urlMetadata from 'url-metadata'
 import { type Data } from '../../.adonisjs/client/data.js'
 import { type TransactionClientContract } from '@adonisjs/lucid/types/database'
 import string from '@adonisjs/core/helpers/string'
-
-export type BookmarkListFilters = {
-  archived?: boolean
-  tags?: number[]
-  search?: string
-  sort?: 'added' | 'visited' | 'views'
-  pinned?: boolean
-}
+import { DEFAULT_FILTERS } from '../../shared/constants/filters.ts'
+import {
+  type BookmarkListFilters,
+  BOOKMARKS_SORT_OPTIONS,
+  type BookmarksSortOption,
+} from '../../shared/constants/bookmarks.ts'
 
 export class BookmarkService {
+  static getQueryFilters(query: ReturnType<HttpContext['request']['qs']>): BookmarkListFilters {
+    return {
+      tags: (query.tags || []).map(Number).filter(Boolean),
+      archived: query.archived === 'true',
+      search: query.search || '',
+      sort: Object.values(BOOKMARKS_SORT_OPTIONS).includes(query.sort)
+        ? query.sort
+        : BOOKMARKS_SORT_OPTIONS.CREATED_AT,
+      page: Number(query.page) || DEFAULT_FILTERS.PAGE,
+      perPage: Number(query.perPage) || DEFAULT_FILTERS.PER_PAGE,
+    }
+  }
+
   static async listForUser(userId: number, filters: BookmarkListFilters = {}) {
     const query = Bookmark.query()
       .where('user_id', userId)
       .orderBy('is_pinned', 'desc')
+      .if(typeof filters.archived === 'boolean', (q) => q.where('is_archived', filters.archived!))
+      .if(filters.tags?.length && filters.tags.map(Number).filter(Boolean).length, (q) =>
+        q.whereHas('tags', (tagQ) => tagQ.whereIn('tags.id', filters.tags!))
+      )
+      .if(filters.search, (q) => q.where('title', 'like', `%${filters.search}%`))
+      .if(filters.sort && Object.values(BOOKMARKS_SORT_OPTIONS).includes(filters.sort), (q) =>
+        q.orderBy(filters.sort as BookmarksSortOption, 'desc')
+      )
       .preload('tags')
 
-    if (typeof filters.archived === 'boolean') {
-      query.andWhere('is_archived', filters.archived)
-    }
-
-    if (filters.tags?.length) {
-      query.whereHas('tags', (tagsQ) => tagsQ.whereIn('tags.id', filters.tags!))
-    }
-
-    if (filters.search) {
-      query.andWhere('title', 'like', `%${filters.search}%`)
-    }
-
-    if (filters.sort) {
-      switch (filters.sort) {
-        case 'added': {
-          query.orderBy('created_at', 'desc')
-          break
-        }
-
-        case 'visited': {
-          query.orderBy('last_viewed_at', 'desc')
-          break
-        }
-
-        case 'views': {
-          query.orderBy('view_count', 'desc')
-          break
-        }
-      }
-    }
-
-    return query
+    return query.paginate(
+      filters.page ?? DEFAULT_FILTERS.PAGE,
+      filters.perPage ?? DEFAULT_FILTERS.PER_PAGE
+    )
   }
 
   static async createBookmark(userId: number, data: CreateBookmarkValidator) {

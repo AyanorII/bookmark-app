@@ -9,12 +9,9 @@ export class TagService {
   static async listForUser(userId: number, filters: TagListFilters = {}) {
     const query = Tag.query()
       .where('user_id', userId)
-      .withCount('bookmarks', (b) => b.where('is_archived', filters.archived ?? false))
+      .if(filters.search, (q) => q.where('name', 'like', `%${filters.search}%`))
       .orderBy('name', 'asc')
-
-    if (filters.search) {
-      query.andWhere('name', 'like', `%${filters.search}%`)
-    }
+      .withCount('bookmarks', (b) => b.where('is_archived', filters.archived ?? false))
 
     return query
   }
