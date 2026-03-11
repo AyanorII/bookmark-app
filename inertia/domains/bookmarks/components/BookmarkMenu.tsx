@@ -102,12 +102,15 @@ export const BookmarkMenu = ({ bookmark }: BookmarkMenuProps) => {
             <Menu.Item
               key={action.id}
               onClick={action.onClick}
-              target="_blank"
-              rel="noopener noreferrer"
               leftSection={action.icon}
               px={8}
-              component="a"
-              href={bookmark.url}
+              {...(action.id === 'visit' && {
+                component: 'a',
+                href: bookmark.url,
+                target: '_blank',
+                rel: 'noopener noreferrer',
+                className: 'size-full',
+              })}
             >
               {action.label}
             </Menu.Item>
