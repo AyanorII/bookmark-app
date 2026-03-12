@@ -1,12 +1,12 @@
 import { BookmarkListFilters } from '@/shared/constants/bookmarks'
 import { Link, LinkProps } from '@adonisjs/inertia/react'
 import { Data } from '@generated/data'
-import { router } from '@inertiajs/react'
 import { Avatar, Button, Checkbox, Group, Stack, Text } from '@mantine/core'
 import { LuArchive } from 'react-icons/lu'
 import { RiHome6Line } from 'react-icons/ri'
 import { urlFor } from '~/client'
 import { useBookmarkQueryFilters } from '~/domains/bookmarks/hooks/useBookmarkQueryFilters'
+import { useSearchParams } from '~/hooks/useSearchParams'
 import { cn } from '~/lib/utils'
 
 type NavLinksProps = {
@@ -14,6 +14,7 @@ type NavLinksProps = {
 }
 export const NavLinks = ({ tags }: NavLinksProps) => {
   const { filters } = useBookmarkQueryFilters()
+  const searchParams = useSearchParams()
 
   const hasTagFilters =
     !!filters.tags?.length && filters.tags.map(Number).filter(Boolean).length > 0
@@ -63,9 +64,10 @@ export const NavLinks = ({ tags }: NavLinksProps) => {
         {hasTagFilters && (
           <Button
             onClick={() => {
-              router.get('', { tags: [] } as BookmarkListFilters, {
-                preserveState: true,
-                replace: true,
+              searchParams.set<BookmarkListFilters>({
+                ...filters,
+                page: undefined,
+                tags: [],
               })
             }}
             variant="subtle"
@@ -78,9 +80,10 @@ export const NavLinks = ({ tags }: NavLinksProps) => {
       <Checkbox.Group
         value={filters.tags?.map(String) ?? []}
         onChange={(values) => {
-          router.get('', { tags: values.map(Number).filter(Boolean) } as BookmarkListFilters, {
-            preserveState: true,
-            replace: true,
+          searchParams.set<BookmarkListFilters>({
+            ...filters,
+            page: undefined,
+            tags: values.map(Number).filter(Boolean),
           })
         }}
         className="overflow-auto pr-3 mt-4"

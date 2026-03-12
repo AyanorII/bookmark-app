@@ -22,13 +22,16 @@ import { useBookmarkQueryFilters } from '../hooks/useBookmarkQueryFilters'
 import { useCallback, useMemo } from 'react'
 import { BookmarkListFilters } from '@/shared/constants/bookmarks'
 import { MdOutlinePushPin } from 'react-icons/md'
+import { useSearchParams } from '~/hooks/useSearchParams'
 
 type BookmarkItemProps = {
   bookmark: Data.Bookmark
 }
 
 export const BookmarkItem = ({ bookmark }: BookmarkItemProps) => {
+  const searchParams = useSearchParams()
   const { filters } = useBookmarkQueryFilters()
+
   const { mutate: incrementViewCount } = useIncrementBookmarkViewCountMutation({
     onSuccess: () => {
       router.reload({ only: ['bookmarks'] })
@@ -75,16 +78,13 @@ export const BookmarkItem = ({ bookmark }: BookmarkItemProps) => {
 
   const handleTagClick = useCallback(
     (tagId: Data.Tag['id']) => {
-      router.get(
-        '',
-        {
-          ...filters,
-          tags: filters.tags?.includes(tagId)
-            ? filters.tags.map(Number).filter((t) => t !== tagId)
-            : [...(filters.tags?.map(Number).filter(Boolean) ?? []), tagId],
-        } as BookmarkListFilters,
-        { preserveState: true, replace: true }
-      )
+      searchParams.set<BookmarkListFilters>({
+        ...filters,
+        page: undefined,
+        tags: filters.tags?.includes(tagId)
+          ? filters.tags.map(Number).filter((t) => t !== tagId)
+          : [...(filters.tags?.map(Number).filter(Boolean) ?? []), tagId],
+      })
     },
     [filters]
   )

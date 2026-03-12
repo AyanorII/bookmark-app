@@ -17,14 +17,14 @@ import {
 export class BookmarkService {
   static getQueryFilters(query: ReturnType<HttpContext['request']['qs']>): BookmarkListFilters {
     return {
-      tags: (query.tags || []).map(Number).filter(Boolean),
+      tags: Array.isArray(query.tags) ? query.tags.map(Number).filter(Boolean) : [],
       archived: query.archived === 'true',
       search: query.search || '',
       sort: Object.values(BOOKMARKS_SORT_OPTIONS).includes(query.sort)
         ? query.sort
         : BOOKMARKS_SORT_OPTIONS.CREATED_AT,
-      page: Number(query.page) || DEFAULT_FILTERS.PAGE,
-      perPage: Number(query.perPage) || DEFAULT_FILTERS.PER_PAGE,
+      page: Number(query.page) > 0 ? Number(query.page) : DEFAULT_FILTERS.PAGE,
+      perPage: Number(query.perPage) > 0 ? Number(query.perPage) : DEFAULT_FILTERS.PER_PAGE,
     }
   }
 

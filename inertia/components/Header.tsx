@@ -1,7 +1,6 @@
 import { Burger, Button, Group, Modal, Text, TextInput } from '@mantine/core'
 import { Logo } from './Logo'
 import { RiSearchLine } from 'react-icons/ri'
-import { router } from '@inertiajs/react'
 import { useBookmarkQueryFilters } from '~/domains/bookmarks/hooks/useBookmarkQueryFilters'
 import { FaPlus } from 'react-icons/fa6'
 import { useDisclosure } from '@mantine/hooks'
@@ -10,12 +9,14 @@ import { toast } from 'sonner'
 import { UserMenu } from './UserMenu'
 import { Link } from '@adonisjs/inertia/react'
 import { BookmarkListFilters } from '@/shared/constants/bookmarks'
+import { useSearchParams } from '~/hooks/useSearchParams'
 
 type Props = {
   isOpened: boolean
   onToggle: () => void
 }
 export const Header = ({ isOpened, onToggle }: Props) => {
+  const searchParams = useSearchParams()
   const { filters } = useBookmarkQueryFilters()
 
   const [isBookmarkModalOpen, { open: openBookmarkModal, close: closeBookmarkModal }] =
@@ -38,19 +39,11 @@ export const Header = ({ isOpened, onToggle }: Props) => {
           if (e.key === 'Enter') {
             const value = e.currentTarget.value
 
-            router.get(
-              '',
-              {
-                ...filters,
-                page: undefined,
-                tags: filters.tags?.map(Number).filter(Boolean),
-                search: value || undefined,
-              } as BookmarkListFilters,
-              {
-                preserveState: true,
-                replace: true,
-              }
-            )
+            searchParams.set<BookmarkListFilters>({
+              page: undefined,
+              tags: filters.tags?.map(Number).filter(Boolean),
+              search: value || undefined,
+            })
           }
         }}
       />

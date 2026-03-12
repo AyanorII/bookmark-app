@@ -1,10 +1,10 @@
-import { router } from '@inertiajs/react'
 import { Button, Group, Menu } from '@mantine/core'
 import { useBookmarkQueryFilters } from '../hooks/useBookmarkQueryFilters'
 import { BiSortAlt2 } from 'react-icons/bi'
 import { FaCheck } from 'react-icons/fa6'
 import { BookmarkListFilters, BOOKMARKS_SORT_OPTIONS } from '@/shared/constants/bookmarks'
 import { DEFAULT_FILTERS } from '@/shared/constants/filters'
+import { useSearchParams } from '~/hooks/useSearchParams'
 
 const SORT_OPTIONS = [
   { value: BOOKMARKS_SORT_OPTIONS.CREATED_AT, label: 'Recently added' },
@@ -13,6 +13,7 @@ const SORT_OPTIONS = [
 ] as const
 
 export const BookmarkSortMenu = () => {
+  const searchParams = useSearchParams()
   const { filters } = useBookmarkQueryFilters()
 
   return (
@@ -37,16 +38,12 @@ export const BookmarkSortMenu = () => {
             <Menu.Item
               key={option.value}
               onClick={() => {
-                router.get(
-                  '',
-                  {
-                    ...filters,
-                    tags: filters?.tags?.map(Number).filter(Boolean),
-                    page: undefined,
-                    sort: option.value === DEFAULT_FILTERS.SORT ? undefined : option.value,
-                  } as BookmarkListFilters,
-                  { preserveState: true, replace: true }
-                )
+                searchParams.set<BookmarkListFilters>({
+                  ...filters,
+                  tags: filters?.tags?.map(Number).filter(Boolean),
+                  page: undefined,
+                  sort: option.value === DEFAULT_FILTERS.SORT ? undefined : option.value,
+                })
               }}
             >
               <Group justify="space-between" gap={16}>
