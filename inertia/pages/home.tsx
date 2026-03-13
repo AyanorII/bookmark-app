@@ -8,6 +8,7 @@ import { useBookmarkQueryFilters } from '~/domains/bookmarks/hooks/useBookmarkQu
 import { Header } from '~/components/Header'
 import { BookmarkSortMenu } from '~/domains/bookmarks/components/BookmarkSortMenu'
 import type { PaginationMeta } from '../../app/helpers/paginator'
+import { Head } from '@inertiajs/react'
 
 type HomeProps = InertiaProps<{
   bookmarks: Data.Bookmark[]
@@ -39,30 +40,33 @@ export default function Home({ bookmarks, tags, meta }: HomeProps) {
   }
 
   return (
-    <AppShell
-      padding="md"
-      header={{ height: 80 }}
-      navbar={{
-        width: { base: 200, md: 300, lg: 298 },
-        breakpoint: 'sm',
-        collapsed: { mobile: !opened },
-      }}
-    >
-      <AppShell.Header>
-        <Header isOpened={opened} onToggle={toggle} />
-      </AppShell.Header>
-      <AppShell.Navbar p="md">
-        <NavLinks tags={tags} />
-      </AppShell.Navbar>
-      <AppShell.Main>
-        <Group justify="space-between" align="center" mb={16} wrap="nowrap">
-          <Title order={1} size="xl">
-            {getTitle()}
-          </Title>
-          <BookmarkSortMenu />
-        </Group>
-        <BookmarksGrid bookmarks={bookmarks} meta={meta} />
-      </AppShell.Main>
-    </AppShell>
+    <>
+      <Head title={filters.archived ? 'Archived' : 'Home'} />
+      <AppShell
+        padding="md"
+        header={{ height: 80 }}
+        navbar={{
+          width: { base: 200, md: 300, lg: 298 },
+          breakpoint: 'sm',
+          collapsed: { mobile: !opened },
+        }}
+      >
+        <AppShell.Header>
+          <Header isOpened={opened} onToggle={toggle} />
+        </AppShell.Header>
+        <AppShell.Navbar p="md">
+          <NavLinks tags={tags} />
+        </AppShell.Navbar>
+        <AppShell.Main>
+          <Group justify="space-between" align="center" mb={16} wrap="nowrap">
+            <Title order={1} size="xl">
+              {getTitle()}
+            </Title>
+            <BookmarkSortMenu />
+          </Group>
+          <BookmarksGrid bookmarks={bookmarks} meta={meta} />
+        </AppShell.Main>
+      </AppShell>
+    </>
   )
 }
